@@ -153,7 +153,7 @@ async def ingest_student_notes(payload: IngestRequest):
 async def ask_question(payload: QuestionRequest):
     """
     Answers student questions by retrieving relevant notes chunks from ChromaDB
-    and generating an answer using Groq (llama3-8b-8192) based ONLY on retrieved notes.
+    and generating an answer using Groq (llama-3.1-8b-instant) based ONLY on retrieved notes.
     """
     # Empty query validation
     if not payload.question.strip():

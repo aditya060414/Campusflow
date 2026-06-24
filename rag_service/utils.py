@@ -20,7 +20,7 @@ if not GROQ_API_KEY:
 
 def call_groq(system_prompt: str, user_prompt: str) -> str:
     """
-    Reusable helper to call the Groq API using the llama3-8b-8192 model
+    Reusable helper to call the Groq API using the llama-3.1-8b-instant model
     with a temperature of 0.3. Handles API key checking and errors.
     """
     if not GROQ_API_KEY:
@@ -29,7 +29,7 @@ def call_groq(system_prompt: str, user_prompt: str) -> str:
     try:
         client = Groq(api_key=GROQ_API_KEY)
         completion = client.chat.completions.create(
-            model="llama3-8b-8192",
+            model="llama-3.1-8b-instant",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}

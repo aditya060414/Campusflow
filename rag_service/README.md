@@ -9,7 +9,7 @@ Optimized for rapid hackathon demos, it features fast response times, a clean ar
 * **API Framework:** FastAPI & Uvicorn
 * **Vector Database:** ChromaDB (In-Memory client)
 * **Embedding Model:** SentenceTransformers (`all-MiniLM-L6-v2`, initialized globally)
-* **LLM Engine:** Groq API (`llama3-8b-8192` model with temperature `0.3`)
+* **LLM Engine:** Groq API (`llama-3.1-8b-instant` model with temperature `0.3`)
 * **Text Chunking:** LangChain RecursiveCharacterTextSplitter (chunk size: 500, overlap: 100)
 * **Validation:** Pydantic v2
 
