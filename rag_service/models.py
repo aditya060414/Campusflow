@@ -48,6 +48,7 @@ class IngestResponse(BaseModel):
 
 class QuestionResponse(BaseModel):
     answer: str = Field(..., description="The generated answer from the notes context")
+    answerSource: Literal["notes", "hybrid", "general"] = Field("general", description="The source classification of the answer")
     sources: int = Field(..., description="The number of source chunks retrieved and used for context")
 
 class FlashcardItem(BaseModel):
