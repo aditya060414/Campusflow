@@ -96,6 +96,19 @@ def handle_exception(e: Exception, context_message: str):
 # ENDPOINTS
 # =====================================================================
 
+@app.get("/", tags=["System"])
+def read_root():
+    """
+    Welcome endpoint providing basic information and redirecting users to the API documentation.
+    """
+    return {
+        "message": "Welcome to the CampusFlow AI Study Buddy RAG Service API!",
+        "documentation": "/docs",
+        "health_check": "/health",
+        "status": "active"
+    }
+
+
 @app.get("/health", tags=["System"])
 def health_check():
     """
