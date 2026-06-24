@@ -57,6 +57,7 @@ export const AskQuestion = ({ subject }) => {
         {
           question: currentQuery,
           answer: result.data.answer,
+          answerSource: result.data.answerSource,
           sources: result.data.sources,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         },
@@ -65,6 +66,32 @@ export const AskQuestion = ({ subject }) => {
     } else {
       // Restore query if API failed
       setQuery(currentQuery);
+    }
+  };
+
+  // Helper to render source badges
+  const renderSourceBadge = (source) => {
+    const s = source || "general";
+    switch (s) {
+      case "notes":
+        return (
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-100 text-[10px] font-semibold dark:bg-blue-950/45 dark:text-blue-400 dark:border-blue-900/40">
+            📚 Notes Based
+          </span>
+        );
+      case "hybrid":
+        return (
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-100 text-[10px] font-semibold dark:bg-purple-950/45 dark:text-purple-400 dark:border-purple-900/40">
+            🔄 Notes + AI Knowledge
+          </span>
+        );
+      case "general":
+      default:
+        return (
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-gray-55 bg-slate-50 text-slate-705 border border-slate-200 text-[10px] font-semibold dark:bg-slate-900 dark:text-slate-400 dark:border-slate-800">
+            🧠 General Knowledge
+          </span>
+        );
     }
   };
 
@@ -98,7 +125,7 @@ export const AskQuestion = ({ subject }) => {
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                 Start your study session!
               </h3>
-              <p className="text-xs text-gray-500 dark:text-slate-450 max-w-sm mt-1">
+              <p className="text-xs text-gray-500 dark:text-slate-455 max-w-sm mt-1">
                 Ask anything about **{subject}**. The AI will scan your vectorized notes and formulate answers supported strictly by your text.
               </p>
             </div>
@@ -120,9 +147,12 @@ export const AskQuestion = ({ subject }) => {
                   {/* AI Response Bubble */}
                   <div className="flex justify-start">
                     <div className="max-w-[85%] bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl rounded-tl-none px-4 py-3 text-sm shadow-sm space-y-2.5">
-                      <div className="flex items-center gap-1.5 text-xs text-primary dark:text-primary-400 font-semibold">
-                        <Sparkles className="h-4 w-4" />
-                        <span>AI Mentor</span>
+                      <div className="flex items-center justify-between gap-4 w-full border-b border-gray-100 dark:border-slate-800/60 pb-2 mb-1">
+                        <div className="flex items-center gap-1.5 text-xs text-primary dark:text-primary-400 font-semibold">
+                          <Sparkles className="h-4 w-4" />
+                          <span>AI Mentor</span>
+                        </div>
+                        {renderSourceBadge(chat.answerSource)}
                       </div>
                       
                       <p className="text-gray-850 dark:text-slate-205 leading-relaxed whitespace-pre-line">
