@@ -174,6 +174,7 @@ async def ask_question(payload: QuestionRequest):
         if not context or sources_count == 0:
             return QuestionResponse(
                 answer="I could not find that information in your notes.",
+                answerSource="general",
                 sources=0
             )
 
@@ -184,12 +185,21 @@ async def ask_question(payload: QuestionRequest):
         )
 
         # Call Groq API
-        answer = call_groq(
+        raw_response = call_groq(
             system_prompt=RAG_QA_SYSTEM_PROMPT,
             user_prompt=user_prompt
         )
 
-        return QuestionResponse(answer=answer, sources=sources_count)
+        # Parse the JSON response
+        parsed = parse_json_response(raw_response)
+        answer = parsed.get("answer", "")
+        answer_source = parsed.get("answerSource", "general")
+
+        return QuestionResponse(
+            answer=answer,
+            answerSource=answer_source,
+            sources=sources_count
+        )
     except Exception as e:
         handle_exception(e, "answering question")
 
