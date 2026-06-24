@@ -49,12 +49,13 @@ def parse_json_response(text: str):
     """
     Robustly extracts and parses JSON from LLM responses.
     Handles raw JSON, JSON wrapped in markdown code blocks, and minor conversational filler.
+    Using strict=False allows control characters like raw newlines inside string values.
     """
     cleaned = text.strip()
     
     # 1. Try to parse directly
     try:
-        return json.loads(cleaned)
+        return json.loads(cleaned, strict=False)
     except json.JSONDecodeError:
         pass
 
@@ -63,7 +64,7 @@ def parse_json_response(text: str):
     if match:
         candidate = match.group(1).strip()
         try:
-            return json.loads(candidate)
+            return json.loads(candidate, strict=False)
         except json.JSONDecodeError:
             pass
 
@@ -72,7 +73,7 @@ def parse_json_response(text: str):
     if match:
         candidate = match.group(1).strip()
         try:
-            return json.loads(candidate)
+            return json.loads(candidate, strict=False)
         except json.JSONDecodeError as e:
             raise ValueError(f"Extracted JSON candidate was invalid: {e}")
 
