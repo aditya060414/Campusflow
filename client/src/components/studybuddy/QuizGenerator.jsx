@@ -25,6 +25,13 @@ export const QuizGenerator = ({ subject }) => {
   // API hook integration
   const { loading, execute: fetchQuiz } = useApi(ragService.generateQuiz);
 
+  const handleReset = () => {
+    setSelectedAnswers({});
+    setShowAnswers(false);
+    setQuizSubmitted(false);
+    setScore(0);
+  };
+
   // Clear states if subject changes
   useEffect(() => {
     handleReset();
@@ -82,12 +89,7 @@ export const QuizGenerator = ({ subject }) => {
     localStorage.setItem("cf_quizzes_count", (currentCount + 1).toString());
   };
 
-  const handleReset = () => {
-    setSelectedAnswers({});
-    setShowAnswers(false);
-    setQuizSubmitted(false);
-    setScore(0);
-  };
+
 
   // Get performance feedback based on score
   const getPerformanceFeedback = (score) => {
