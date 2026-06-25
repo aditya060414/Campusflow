@@ -28,15 +28,15 @@ export const CalendarPreview = ({
   // Handle empty state
   if (deadlines.length === 0) {
     return (
-      <div className="p-8 sm:p-12 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-dashed border-zinc-200 dark:border-white/10 rounded-3xl text-center max-w-2xl mx-auto space-y-5 relative z-10 animate-fade-in min-h-[400px] flex flex-col items-center justify-center shadow-lg">
-        <div className="h-16 w-16 mx-auto rounded-2xl bg-sky-500/10 dark:bg-sky-500/20 flex items-center justify-center text-sky-500 dark:text-sky-400">
+      <div className="p-8 sm:p-12 bg-panel border border-dashed border-border rounded-3xl text-center max-w-2xl mx-auto space-y-5 relative z-10 animate-fade-in min-h-[400px] flex flex-col items-center justify-center shadow-lg">
+        <div className="h-16 w-16 mx-auto rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-500">
           <CalendarIcon className="w-8 h-8" />
         </div>
         <div className="space-y-2">
-          <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-heading">
+          <h3 className="text-lg font-bold text-txt font-heading">
             No deadlines scheduled
           </h3>
-          <p className="text-xs sm:text-sm text-zinc-400 dark:text-zinc-500 max-w-md mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-muted max-w-md mx-auto leading-relaxed">
             Create your first exam, assignment, or project deadline.
             CampusFlow's AI will automatically build a personalized day-by-day
             study roadmap on your calendar!
@@ -136,11 +136,11 @@ export const CalendarPreview = ({
   const getDeadlinePillStyle = (d) => {
     const typeStr = d.type || "Assignment";
     if (typeStr.toLowerCase() === "exam") {
-      return "bg-red-500/15 text-red-500 dark:text-red-400 border border-red-500/20";
+      return "bg-red-500/15 text-red-500 border border-red-500/20";
     } else if (typeStr.toLowerCase() === "project") {
-      return "bg-purple-500/15 text-purple-500 dark:text-purple-400 border border-purple-500/20";
+      return "bg-purple-500/15 text-purple-500 border border-purple-500/20";
     } else {
-      return "bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/20";
+      return "bg-orange-500/15 text-orange-600 border border-orange-500/20";
     }
   };
 
@@ -152,9 +152,9 @@ export const CalendarPreview = ({
       taskText.includes("mock") ||
       taskText.includes("test")
     ) {
-      return "bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/20";
+      return "bg-green-500/15 text-green-600 border border-green-500/20";
     }
-    return "bg-blue-500/15 text-blue-500 dark:text-blue-400 border border-blue-500/20";
+    return "bg-blue-500/15 text-blue-500 border border-blue-500/20";
   };
 
   const getCellHighlight = (events) => {
@@ -162,13 +162,13 @@ export const CalendarPreview = ({
       const hasHigh = events.deadlines.some((d) => d.priority === "High");
       const hasMed = events.deadlines.some((d) => d.priority === "Medium");
       if (hasHigh)
-        return "bg-red-500/[0.03] dark:bg-red-500/[0.06] border-red-500/10";
+        return "bg-red-500/[0.06] border-red-500/10";
       if (hasMed)
-        return "bg-yellow-500/[0.03] dark:bg-yellow-500/[0.06] border-yellow-500/10";
-      return "bg-green-500/[0.03] dark:bg-green-500/[0.06] border-green-500/10";
+        return "bg-yellow-500/[0.06] border-yellow-500/10";
+      return "bg-green-500/[0.06] border-green-500/10";
     }
     if (events.studySessions.length > 0) {
-      return "bg-blue-500/[0.03] dark:bg-blue-500/[0.06] border-blue-500/10";
+      return "bg-blue-500/[0.06] border-blue-500/10";
     }
     return "";
   };

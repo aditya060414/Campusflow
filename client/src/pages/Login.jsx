@@ -66,7 +66,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-bg text-txt transition-colors duration-300 px-4 sm:px-6 lg:px-8">
       
       {/* Visual background accents */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -75,17 +75,17 @@ export const Login = () => {
       </div>
 
       {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md bg-white dark:bg-slate-950 rounded-2xl border border-gray-250 dark:border-slate-800 shadow-xl p-8 transition-colors duration-300">
+      <div className="relative z-10 w-full max-w-md bg-panel rounded-2xl border border-border shadow-xl p-8 transition-colors duration-300">
         
         {/* Branding & Header */}
         <div className="flex flex-col items-center text-center mb-8">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20 mb-4">
             <GraduationCap className="h-7 w-7" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-txt">
             Campus<span className="text-primary">Flow</span>
           </h1>
-          <p className="text-sm text-gray-500 dark:text-slate-400 mt-1">
+          <p className="text-sm text-muted mt-1">
             Access your AI Study Buddy & RAG tools
           </p>
         </div>
@@ -95,11 +95,11 @@ export const Login = () => {
           
           {/* Student ID Field */}
           <div>
-            <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">
+            <label htmlFor="studentId" className="block text-sm font-medium text-slate-300 mb-1.5">
               Student ID
             </label>
             <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
                 <Hash className="h-5 w-5" />
               </div>
               <input
@@ -110,10 +110,10 @@ export const Login = () => {
                   setStudentId(e.target.value);
                   if (errors.studentId) setErrors((prev) => ({ ...prev, studentId: null }));
                 }}
-                className={`block w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm bg-white dark:bg-slate-900 text-gray-950 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 ${
+                className={`block w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm bg-bg text-txt placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 ${
                   errors.studentId
                     ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-200 dark:border-slate-800 focus:ring-primary"
+                    : "border-border focus:ring-primary"
                 }`}
                 placeholder="e.g., student_123"
               />
@@ -125,11 +125,11 @@ export const Login = () => {
 
           {/* Name Field */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1.5">
+            <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-1.5">
               Full Name
             </label>
             <div className="relative rounded-lg shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-slate-500">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
                 <User className="h-5 w-5" />
               </div>
               <input
@@ -140,10 +140,10 @@ export const Login = () => {
                   setName(e.target.value);
                   if (errors.name) setErrors((prev) => ({ ...prev, name: null }));
                 }}
-                className={`block w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm bg-white dark:bg-slate-900 text-gray-950 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 ${
+                className={`block w-full pl-10 pr-4 py-2.5 rounded-lg border text-sm bg-bg text-txt placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 ${
                   errors.name
                     ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-200 dark:border-slate-800 focus:ring-primary"
+                    : "border-border focus:ring-primary"
                 }`}
                 placeholder="e.g., John Doe"
               />
@@ -157,7 +157,7 @@ export const Login = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-semibold text-white bg-primary hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-slate-950 transition-all duration-200 shadow-md shadow-primary/20 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-semibold text-white bg-primary hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200 shadow-md shadow-primary/20 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
@@ -179,8 +179,8 @@ export const Login = () => {
         </form>
 
         {/* Footer Info */}
-        <div className="mt-8 text-center border-t border-gray-150 dark:border-slate-800 pt-6">
-          <p className="text-xs text-gray-400 dark:text-slate-500">
+        <div className="mt-8 text-center border-t border-border pt-6">
+          <p className="text-xs text-muted">
             For development, enter any Student ID and Name.
           </p>
         </div>

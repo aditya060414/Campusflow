@@ -132,7 +132,7 @@ export const SignupPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             
             {/* Row 1 */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <AuthInput
                 label="Email Address"
                 icon={<Mail className="w-5 h-5" />}
@@ -168,7 +168,7 @@ export const SignupPage: React.FC = () => {
             />
 
             {/* Row 3 & 4: Password and Confirm */}
-            <div className="grid grid-cols-2 gap-4 items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
               <div>
                 <AuthInput
                   label="Password"

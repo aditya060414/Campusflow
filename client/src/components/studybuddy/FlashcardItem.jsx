@@ -14,20 +14,20 @@ export const FlashcardItem = ({ question, answer, difficulty, index }) => {
     switch (l) {
       case "easy":
         return (
-          <span className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-panel2 text-emerald-600 dark:text-emerald-400 border border-border text-[10px] font-bold tracking-wide uppercase font-heading">
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-panel2 text-emerald-400 border border-border text-[10px] font-bold tracking-wide uppercase font-heading">
             🟢 Easy
           </span>
         );
       case "hard":
         return (
-          <span className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-panel2 text-red-600 dark:text-red-400 border border-border text-[10px] font-bold tracking-wide uppercase font-heading">
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-panel2 text-red-400 border border-border text-[10px] font-bold tracking-wide uppercase font-heading">
             🔴 Hard
           </span>
         );
       case "medium":
       default:
         return (
-          <span className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-panel2 text-amber-600 dark:text-amber-400 border border-border text-[10px] font-bold tracking-wide uppercase font-heading">
+          <span className="flex items-center gap-1 px-2 py-0.5 rounded-[4px] bg-panel2 text-amber-400 border border-border text-[10px] font-bold tracking-wide uppercase font-heading">
             🟡 Medium
           </span>
         );

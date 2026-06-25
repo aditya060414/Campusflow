@@ -450,27 +450,27 @@ export const NotesUpload = ({ onIngestionSuccess }) => {
                   <p className="text-[14px] font-bold text-txt">
                     Drag & Drop Files Here
                   </p>
-                  <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                  <p className="text-xs text-zinc-400">
                     or click to browse your computer
                   </p>
                 </div>
 
-                <div className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 bg-zinc-100 dark:bg-zinc-900 px-3 py-1 rounded-full border border-zinc-200/50 dark:border-zinc-800/50 mt-1 uppercase tracking-wide">
+                <div className="text-[10px] font-bold text-muted bg-panel2 px-3 py-1 rounded-full border border-border mt-1 uppercase tracking-wide">
                   PDF • PNG • JPG • TXT (Max 10MB)
                 </div>
               </div>
             ) : (
               /* Selected File Display */
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200/50 dark:border-zinc-800/45 animate-fade-in">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-panel border border-border animate-fade-in">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="p-2 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200/30 dark:border-zinc-800/40 shrink-0">
+                  <div className="p-2 bg-panel2 rounded-xl border border-border shrink-0">
                     {getFileIcon(selectedFile)}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-zinc-900 dark:text-white truncate">
+                    <p className="text-sm font-bold text-txt truncate">
                       {selectedFile.name}
                     </p>
-                    <p className="text-xs text-zinc-400 dark:text-zinc-500 mt-0.5">
+                    <p className="text-xs text-muted mt-0.5">
                       {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
                     </p>
                   </div>
@@ -480,7 +480,7 @@ export const NotesUpload = ({ onIngestionSuccess }) => {
                   type="button"
                   onClick={removeFile}
                   disabled={loading}
-                  className="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors shrink-0 disabled:opacity-50"
+                  className="p-2 text-muted hover:text-red-500 hover:bg-red-50 rounded-xl transition-colors shrink-0 disabled:opacity-50"
                   title="Remove File"
                 >
                   <Trash2 className="w-5 h-5" />
@@ -497,7 +497,7 @@ export const NotesUpload = ({ onIngestionSuccess }) => {
           <div>
             <label
               htmlFor="notes"
-              className="block text-xs font-semibold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase mb-1.5 flex items-center gap-1.5 font-heading"
+              className="block text-xs font-semibold text-zinc-400 tracking-wider uppercase mb-1.5 flex items-center gap-1.5 font-heading"
             >
               <FileText className="h-4 w-4 text-sky-500" />
               Lecture Notes Content

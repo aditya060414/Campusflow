@@ -36,8 +36,8 @@ const emptyTT = () => DAYS.reduce((a,d) => ({...a,[d]:[]}), {});
 
 // Colour helper
 const pctColors = (pct) => {
-  if (pct >= 85) return { border:"border-emerald-500", bg:"bg-emerald-500/10", text:"text-emerald-600 dark:text-emerald-400", bar:"bg-emerald-500", label:"Safe ✅" };
-  if (pct >= 75) return { border:"border-yellow-400",  bg:"bg-yellow-400/10",  text:"text-yellow-600 dark:text-yellow-400",   bar:"bg-yellow-400",  label:"At Risk ⚠️" };
+  if (pct >= 85) return { border:"border-emerald-500", bg:"bg-emerald-500/10", text:"text-emerald-400", bar:"bg-emerald-500", label:"Safe ✅" };
+  if (pct >= 75) return { border:"border-yellow-400",  bg:"bg-yellow-400/10",  text:"text-yellow-400",   bar:"bg-yellow-400",  label:"At Risk ⚠️" };
   return              { border:"border-red-500",        bg:"bg-red-500/10",     text:"text-red-500",                           bar:"bg-red-500",     label:"Danger 🚨" };
 };
 
@@ -453,7 +453,7 @@ function AllDaysView({ timetable, onEditTimetable }) {
           return (
             <button key={day} onClick={()=>setSelectedDay(day)}
               className={`flex-1 min-w-[70px] px-3 py-2.5 text-[12px] font-bold border-r border-border last:border-0 transition-colors ${
-                selectedDay===day ? "bg-primary text-white" : marked ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-panel2" : "bg-panel text-muted hover:bg-panel2 hover:text-txt"
+                selectedDay===day ? "bg-primary text-white" : marked ? "bg-emerald-500/10 text-emerald-400 hover:bg-panel2" : "bg-panel text-muted hover:bg-panel2 hover:text-txt"
               }`}>
               {DAY_LABELS[day].slice(0,3)}
               {marked && <span className="block text-[9px] font-normal opacity-80">✅</span>}

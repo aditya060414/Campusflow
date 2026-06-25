@@ -161,7 +161,7 @@ export const AskQuestion = ({ subject }) => {
                 </span>
               </div>
             ) : summary ? (
-              <div className="prose prose-sm dark:prose-invert max-w-none text-txt max-h-56 overflow-y-auto pr-2 scrollbar-thin">
+              <div className="prose prose-invert prose-sm max-w-none text-txt max-h-56 overflow-y-auto pr-2 scrollbar-thin">
                 <ReactMarkdown>{summary}</ReactMarkdown>
               </div>
             ) : (

@@ -2,29 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Theme Variables for Toaster & Brutalist Colors */
+/* ── Design Tokens (Dark-Only) ────────────────────────────── */
 :root {
   --bg: #0B0D10;
   --panel: #111318;
+  --panel2: #1A1D24;
   --border: #2B2F36;
   --primary: #2563EB;
   --muted: #9CA3AF;
   --text: #F5F5F5;
-  --toast-bg: #ffffff;
-  --toast-color: #111827;
+  --txt: #F5F5F5;
+  --toast-bg: #1A1D24;
+  --toast-color: #F5F5F5;
 }
 
-.dark {
-  --bg: #0B0D10; /* same dark bg */
-  --panel: #111318;
-  --border: #2B2F36;
-  --primary: #2563EB;
-  --muted: #9CA3AF;
-  --text: #F5F5F5;
-}
-
-
-/* Custom transitions and animations */
+/* ── Utilities ────────────────────────────────────────────── */
 @layer utilities {
   .animate-fade-in {
     animation: fadeIn 0.4s ease-out forwards;
@@ -45,7 +37,7 @@
   }
 }
 
-/* Base styles and custom scrollbars */
+/* ── Base ─────────────────────────────────────────────────── */
 body {
   font-family: "Inter", sans-serif;
   overflow-x: hidden;
@@ -53,7 +45,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Modern clean scrollbar */
+/* ── Scrollbar (dark only) ────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -64,23 +56,15 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1; /* Gray 300 */
+  background: #334155; /* Slate 700 */
   border-radius: 10px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155; /* Slate 700 */
-}
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8; /* Gray 400 */
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
   background: #475569; /* Slate 600 */
 }
 
-/* Supporting 3D Flip Card backface and styling safety boundaries */
+/* ── 3D helpers ───────────────────────────────────────────── */
 .backface-hidden {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -90,7 +74,7 @@ body {
   transform-style: preserve-3d;
 }
 
-/* Drifting background blobs animations */
+/* ── Background blob animations ───────────────────────────── */
 @keyframes drift {
   0% {
     transform: translate(0px, 0px) scale(1);
@@ -114,9 +98,7 @@ body {
   animation: drift 25s ease-in-out infinite reverse;
 }
 
-/* Glassmorphism classes removed in favor of standard brutalist panel styles */
-
-/* Heading Typography Overrides */
+/* ── Heading Typography Overrides ─────────────────────────── */
 h1,
 h2,
 h3,

@@ -1,7 +1,6 @@
 import React from "react";
 import { Menu, LogOut, User } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
-import ThemeToggle from "../common/ThemeToggle";
 
 /**
  * Top Navbar component.
@@ -38,10 +37,8 @@ export const Navbar = ({ onMobileMenuToggle }) => {
           </div>
         </div>
 
-        {/* Right: Theme Toggle, User Profile, and Logout */}
+        {/* Right: User Profile and Logout */}
         <div className="flex items-center gap-4">
-          <ThemeToggle />
-
           {/* User Profile Info Card */}
           {student && (
             <div className="flex items-center gap-3 pl-4 border-l border-border">

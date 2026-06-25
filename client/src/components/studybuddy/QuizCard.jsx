@@ -52,12 +52,12 @@ export const QuizCard = ({
           if (showAnswers) {
             if (isCorrect) {
               // Highlight correct answer in Green
-              optionStyles = "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold";
-              IndicatorIcon = <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />;
+              optionStyles = "border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold";
+              IndicatorIcon = <Check className="h-4 w-4 text-emerald-400 shrink-0" />;
             } else if (isSelected && !isCorrect) {
               // Highlight selected incorrect answer in Red
-              optionStyles = "border-red-500 bg-red-500/10 text-red-600 dark:text-red-400 font-bold";
-              IndicatorIcon = <X className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />;
+              optionStyles = "border-red-500 bg-red-500/10 text-red-400 font-bold";
+              IndicatorIcon = <X className="h-4 w-4 text-red-400 shrink-0" />;
             } else {
               // Gray out other unselected incorrect answers
               optionStyles = "border-border bg-panel text-muted opacity-50 cursor-not-allowed";
@@ -94,7 +94,7 @@ export const QuizCard = ({
 
       {/* Show answers validation notice */}
       {showAnswers && !selectedOption && (
-        <p className="flex items-center gap-1 text-[11px] text-amber-600 dark:text-amber-400 font-bold">
+        <p className="flex items-center gap-1 text-[11px] text-amber-400 font-bold">
           <AlertCircle className="h-3.5 w-3.5" />
           You did not answer this question.
         </p>

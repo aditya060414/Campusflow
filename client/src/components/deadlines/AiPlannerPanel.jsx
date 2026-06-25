@@ -69,7 +69,7 @@ export const AiPlannerPanel = ({
       return {
         text: "Moderate Workload",
         color:
-          "text-yellow-600 dark:text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
+          "text-yellow-400 bg-yellow-500/10 border-yellow-500/20",
       };
     }
     return {

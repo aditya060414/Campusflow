@@ -15,11 +15,9 @@ function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          {/* Global Toaster Configuration for Premium Light/Dark Theme matching */}
           <Toaster
             position="top-right"
             toastOptions={{
-              className: "dark:bg-slate-850 dark:text-white transition-colors duration-200",
               style: {
                 borderRadius: "10px",
                 background: "var(--toast-bg)",

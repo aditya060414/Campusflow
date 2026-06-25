@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import AuthLayout from '../../components/auth/AuthLayout';
 import AuthTabs from '../../components/auth/AuthTabs';
 import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import { useAuth } from '../../hooks/useAuth';
+import api from '../../services/api';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -40,18 +40,19 @@ export const LoginPage: React.FC = () => {
 
     setIsLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      const response = await api.post('/auth/login', { username: username.trim(), password });
       if (response.data.success) {
-        login({
-          name: response.data.user.name,
-          email: response.data.user.email,
-          phone: response.data.user.phone,
+        const { user, token, accessToken, refreshToken } = response.data;
+        login(user, {
+          accessToken: token?.accessToken || accessToken,
+          refreshToken: token?.refreshToken || refreshToken,
         });
-        localStorage.setItem('token', response.data.accessToken);
         navigate('/dashboard');
+        return;
       }
+      throw new Error(response.data?.message || 'Login failed.');
     } catch (err: any) {
-      setGlobalError(err.response?.data?.message || 'Invalid credentials.');
+      setGlobalError(err.response?.data?.message || err.message || 'Invalid credentials.');
       setErrors({ username: ' ', password: ' ' }); // Trigger error borders
       setPassword('');
     } finally {

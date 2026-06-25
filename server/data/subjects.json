@@ -557,6 +557,358 @@
         }
       ],
       "metadata": {}
+    },
+    "MATH": {
+      "id": "MATH",
+      "name": "MATH",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "Pythagorean-Triples-List.pdf"
+      ],
+      "summary": "**Lecture Notes Summary: Pythagorean Triples**\n=====================================================\n\n**Introduction**\n---------------\n\n* Pythagorean triples are sets of three positive integers that satisfy the Pythagorean theorem: `a^2 + b^2 = c^2`\n* In this lecture, we will explore a list of primitive Pythagorean triples of numbers from 1 to 300\n\n**Core Concepts**\n----------------\n\n* **Primitive Pythagorean Triples**: Triples where `a`, `b`, and `c` have no common factors other than 1\n* **Pythagorean Theorem**: `a^2 + b^2 = c^2`, where `a` and `b` are the legs of a right triangle and `c` is the hypotenuse\n\n**Major Topics**\n----------------\n\n### 1. List of Primitive Pythagorean Triples\n\n* The list of primitive Pythagorean triples of numbers from 1 to 300 is provided below:\n```markdown\n(3, 4, 5) (5, 12, 13) (8, 15, 17) (7, 24, 25)\n(20, 21, 29) (12, 35, 37) (9, 40, 41) (28, 45, 53)\n(11, 60, 61) (16, 63, 65) (33, 56, 65) (48, 55, 73)\n(13, 84, 85) (36, 77, 85) (39, 80, 89) (65, 72, 97)\n(20, 99, 101) (60, 91, 109)(15, 112, 113) (44, 117, 125)\n(88, 105, 137)(17, 144, 145)(24, 143, 145)(51, 140, 149)\n(85, 132, 157)(119, 120, 169)(52, 165, 173)(19, 180, 181)\n(57, 176, 185)(104, 153, 185)(95, 168, 193)(28, 195, 197)\n(84, 187, 205)(133, 156, 205)(21, 220, 221)(140, 171, 221)\n(60, 221, 229)(105, 208, 233)(120, 209, 241)(32, 255, 257)\n(23, 264, 265)(96, 247, 265)(69, 260, 269)(115, 252, 277)\n```\n### 2. Properties of Pythagorean Triples\n\n* **Even-Odd Property**: If `a` and `b` are both even, then `c` is even. If `a` and `b` are both odd, then `c` is odd.\n* **Square-Free Property**: If `a` and `b` are both square-free, then `c` is also square-free.\n\n**Key Takeaways**\n-----------------\n\n* Pythagorean triples are sets of three positive integers that satisfy the Pythagorean theorem\n* Primitive Pythagorean triples have no common factors other than 1\n* The list of primitive Pythagorean triples of numbers from 1 to 300 is provided above\n* Pythagorean triples have interesting properties, including the even-odd property and the square-free property",
+      "chatHistory": [
+        {
+          "question": "Provide a comprehensive, clear, and high-level explanation of the primary concepts in my uploaded notes for this subject.",
+          "answer": "📚 Based on Your Notes\n\nA Pythagorean triple consists of three positive integers a, b, and c, such that a^2 + b^2 = c^2. In your notes, you have a list of primitive Pythagorean triples, which are triples where a, b, and c have no common factors other than 1.\n\nThe list includes triples such as (3, 4, 5) and (5, 12, 13), where the square of the length of the hypotenuse (c) is equal to the sum of the squares of the lengths of the other two sides (a and b).\n\n💡 Key Takeaway\n\nPythagorean triples are sets of three positive integers that satisfy the Pythagorean theorem, and primitive triples have no common factors other than 1.",
+          "answerSource": "notes",
+          "sources": 2,
+          "timestamp": "02:27 pm",
+          "loading": false
+        }
+      ],
+      "flashcards": [
+        {
+          "question": "What is a Pythagorean triple?",
+          "answer": "A Pythagorean triple is a set of three positive integers a, b, and c, such that a^2 + b^2 = c^2, where c is the length of the hypotenuse of a right-angled triangle with legs of length a and b.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the relationship between the numbers in a Pythagorean triple?",
+          "answer": "The relationship is given by the equation a^2 + b^2 = c^2, where a and b are the lengths of the legs of a right-angled triangle and c is the length of the hypotenuse.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the significance of the list of Pythagorean triples provided in the lecture notes?",
+          "answer": "The list of Pythagorean triples provided in the lecture notes contains primitive Pythagorean triples of numbers from 1 to 300, which can be used to study the properties of right-angled triangles.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the difference between a primitive Pythagorean triple and a non-primitive Pythagorean triple?",
+          "answer": "A primitive Pythagorean triple is a Pythagorean triple where a, b, and c have no common factors other than 1, whereas a non-primitive Pythagorean triple has common factors other than 1.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "How can you determine if a Pythagorean triple is primitive?",
+          "answer": "To determine if a Pythagorean triple is primitive, you need to check if the greatest common divisor (GCD) of the three numbers is 1. If the GCD is 1, then the triple is primitive.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the purpose of studying Pythagorean triples?",
+          "answer": "The purpose of studying Pythagorean triples is to understand the properties of right-angled triangles and to apply this knowledge to various fields such as geometry, trigonometry, and physics.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "Can you give an example of a Pythagorean triple?",
+          "answer": "Yes, an example of a Pythagorean triple is (3, 4, 5), where 3 and 4 are the lengths of the legs of a right-angled triangle and 5 is the length of the hypotenuse.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "How many Pythagorean triples are listed in the lecture notes?",
+          "answer": "There are 40 Pythagorean triples listed in the lecture notes.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the range of numbers for the Pythagorean triples listed in the lecture notes?",
+          "answer": "The range of numbers for the Pythagorean triples listed in the lecture notes is from 1 to 300.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "Can you identify any patterns or relationships among the Pythagorean triples listed in the lecture notes?",
+          "answer": "Yes, one pattern that can be observed is that the triples are listed in order of increasing values of c, the length of the hypotenuse.",
+          "difficulty": "hard"
+        }
+      ],
+      "quizzes": [
+        {
+          "question": "What is a primitive Pythagorean triple?",
+          "options": [
+            "A. A set of three numbers that form a right-angled triangle with no common factors.",
+            "B. A set of three numbers that form a right-angled triangle with at least one common factor.",
+            "C. A set of three numbers that form a right-angled triangle with a hypotenuse greater than 300.",
+            "D. A set of three numbers that form a right-angled triangle with a hypotenuse less than 300."
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "Which of the following is a primitive Pythagorean triple from the list?",
+          "options": [
+            "A. (3, 4, 5)",
+            "B. (5, 12, 13)",
+            "C. (8, 15, 17)",
+            "D. All of the above"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the relationship between the numbers in a Pythagorean triple?",
+          "options": [
+            "A. The sum of the squares of the two smaller numbers is equal to the square of the hypotenuse.",
+            "B. The product of the two smaller numbers is equal to the square of the hypotenuse.",
+            "C. The difference between the squares of the two smaller numbers is equal to the square of the hypotenuse.",
+            "D. The ratio of the two smaller numbers is equal to the square of the hypotenuse."
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "How many primitive Pythagorean triples are listed in the given list?",
+          "options": [
+            "A. 20",
+            "B. 30",
+            "C. 40",
+            "D. 50"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "Which of the following numbers is NOT a primitive Pythagorean triple from the list?",
+          "options": [
+            "A. (85, 132, 157)",
+            "B. (119, 120, 169)",
+            "C. (52, 165, 173)",
+            "D. (85, 132, 157)"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the smallest number in the list of primitive Pythagorean triples?",
+          "options": [
+            "A. 3",
+            "B. 5",
+            "C. 7",
+            "D. 8"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "Which of the following is a characteristic of a primitive Pythagorean triple?",
+          "options": [
+            "A. The numbers have a common factor.",
+            "B. The numbers are all odd.",
+            "C. The numbers are all even.",
+            "D. The numbers have no common factor."
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "How many primitive Pythagorean triples have a hypotenuse greater than 300?",
+          "options": [
+            "A. 0",
+            "B. 1",
+            "C. 2",
+            "D. 3"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "Which of the following numbers is a primitive Pythagorean triple from the list?",
+          "options": [
+            "A. (20, 21, 29)",
+            "B. (12, 35, 37)",
+            "C. (9, 40, 41)",
+            "D. All of the above"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the largest number in the list of primitive Pythagorean triples?",
+          "options": [
+            "A. 257",
+            "B. 265",
+            "C. 269",
+            "D. 277"
+          ],
+          "answer": "A"
+        }
+      ],
+      "metadata": {}
+    }
+  },
+  "21198c48-a23c-4ffb-942e-778ab875199a": {
+    "MATH": {
+      "id": "MATH",
+      "name": "MATH",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "Pythagorean-Triples-List.pdf"
+      ],
+      "summary": "**Primitive Pythagorean Triples**\n=====================================\n\n### Overview\n\nPrimitive Pythagorean triples are sets of three positive integers that satisfy the Pythagorean theorem, a² + b² = c², where c is the hypotenuse of a right-angled triangle. These triples are called primitive because they have no common factors other than 1.\n\n### Key Concepts\n\n* **Pythagorean Theorem**: a² + b² = c²\n* **Primitive Pythagorean Triples**: sets of three positive integers that satisfy the Pythagorean theorem and have no common factors other than 1.\n\n### Major Topics\n\n#### Generating Pythagorean Triples\n\n* **Euclid's Formula**: a = m² - n², b = 2mn, c = m² + n², where m > n > 0 and m and n are coprime positive integers.\n* **Example**: Using Euclid's formula, we can generate the Pythagorean triple (3, 4, 5) by setting m = 3 and n = 1.\n\n#### Properties of Primitive Pythagorean Triples\n\n* **No Common Factors**: primitive Pythagorean triples have no common factors other than 1.\n* **Coprime Integers**: the integers a, b, and c are coprime, meaning they have no common factors other than 1.\n\n### Key Takeaways\n\n* **List of Primitive Pythagorean Triples**: the list of primitive Pythagorean triples of numbers from 1 to 300 is provided.\n* **Generating Triples**: Euclid's formula can be used to generate Pythagorean triples.\n* **Properties of Triples**: primitive Pythagorean triples have no common factors and are composed of coprime integers.\n\n### Example Questions\n\n* What is the smallest primitive Pythagorean triple?\n* How can we generate Pythagorean triples using Euclid's formula?\n* What are the properties of primitive Pythagorean triples?\n\n### Further Reading\n\n* For more information on Pythagorean triples, see [Wikipedia: Pythagorean Triple](https://en.wikipedia.org/wiki/Pythagorean_triple).\n* For more information on Euclid's formula, see [Wikipedia: Euclid's Formula](https://en.wikipedia.org/wiki/Euclid%27s_formula).",
+      "chatHistory": [
+        {
+          "question": "Provide a comprehensive, clear, and high-level explanation of the primary concepts in my uploaded notes for this subject.",
+          "answer": "📚 Based on Your Notes\n\nA Pythagorean triple is a set of three positive integers a, b, and c, such that a^2 + b^2 = c^2. In your notes, you have a list of primitive Pythagorean triples, which are triples that cannot be expressed as multiples of smaller triples.\n\nThe list includes triples like (3, 4, 5), (5, 12, 13), and (8, 15, 17), among others. These triples are fundamental to geometry and trigonometry, and are often used to represent the lengths of the sides of right triangles.\n\n💡 Key Takeaway\n\nPythagorean triples are sets of three positive integers that satisfy the equation a^2 + b^2 = c^2, and are used to represent the lengths of the sides of right triangles.",
+          "answerSource": "notes",
+          "sources": 2,
+          "timestamp": "02:57 pm",
+          "loading": false
+        }
+      ],
+      "flashcards": [
+        {
+          "question": "What is a Pythagorean triple?",
+          "answer": "A Pythagorean triple is a set of three positive integers a, b, and c, such that a^2 + b^2 = c^2. This equation represents the Pythagorean theorem.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the significance of the Pythagorean theorem?",
+          "answer": "The Pythagorean theorem is used to find the length of the hypotenuse of a right-angled triangle, given the lengths of the other two sides.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the difference between a primitive Pythagorean triple and a non-primitive Pythagorean triple?",
+          "answer": "A primitive Pythagorean triple is a set of three positive integers a, b, and c, such that a^2 + b^2 = c^2, where a, b, and c have no common factors other than 1. A non-primitive Pythagorean triple is a set of three positive integers a, b, and c, such that a^2 + b^2 = c^2, where a, b, and c have common factors other than 1.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "How can you determine if a Pythagorean triple is primitive?",
+          "answer": "To determine if a Pythagorean triple is primitive, you can find the greatest common divisor (GCD) of the three numbers. If the GCD is 1, then the triple is primitive.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the relationship between the Pythagorean theorem and the concept of right-angled triangles?",
+          "answer": "The Pythagorean theorem is used to find the length of the hypotenuse of a right-angled triangle, which is a triangle with one angle equal to 90 degrees.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "Can you give an example of a Pythagorean triple?",
+          "answer": "Yes, (3, 4, 5) is a Pythagorean triple, because 3^2 + 4^2 = 5^2.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "How can you use the Pythagorean theorem to find the length of the hypotenuse of a right-angled triangle?",
+          "answer": "To find the length of the hypotenuse, you can use the equation c = sqrt(a^2 + b^2), where a and b are the lengths of the other two sides.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the significance of the list of primitive Pythagorean triples provided in the lecture notes?",
+          "answer": "The list of primitive Pythagorean triples provides a collection of triples that satisfy the Pythagorean theorem, and can be used as a reference for further study or application.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "Can you explain the concept of a primitive Pythagorean triple in your own words?",
+          "answer": "A primitive Pythagorean triple is a set of three positive integers that satisfy the Pythagorean theorem, and have no common factors other than 1.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "How can you use the list of primitive Pythagorean triples to find the length of the hypotenuse of a right-angled triangle?",
+          "answer": "You can use the list of primitive Pythagorean triples to find the length of the hypotenuse by looking up the corresponding triple and using the equation c = sqrt(a^2 + b^2).",
+          "difficulty": "hard"
+        }
+      ],
+      "quizzes": [
+        {
+          "question": "What is a Pythagorean triple?",
+          "options": [
+            "A. A set of three numbers that satisfy the equation a^2 + b^2 = c^2",
+            "B. A set of three numbers that satisfy the equation a^2 + c^2 = b^2",
+            "C. A set of three numbers that satisfy the equation b^2 + c^2 = a^2",
+            "D. A set of three numbers that satisfy the equation a^2 + b^2 = c^2 and a, b, c are all even"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the relationship between the numbers in a Pythagorean triple?",
+          "options": [
+            "A. They are all prime numbers",
+            "B. They are all odd numbers",
+            "C. They satisfy the equation a^2 + b^2 = c^2",
+            "D. They are all even numbers"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "What is the significance of the list of primitive Pythagorean triples provided in the lecture notes?",
+          "options": [
+            "A. It is a list of all possible Pythagorean triples",
+            "B. It is a list of Pythagorean triples that can be used to generate all other triples",
+            "C. It is a list of Pythagorean triples that satisfy the equation a, b, c < 300",
+            "D. It is a list of Pythagorean triples that satisfy the equation a, b, c > 300"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "What is the difference between a primitive Pythagorean triple and a non-primitive Pythagorean triple?",
+          "options": [
+            "A. A primitive triple has all three numbers as prime numbers",
+            "B. A primitive triple has all three numbers as odd numbers",
+            "C. A primitive triple has no common factors among the three numbers",
+            "D. A primitive triple has all three numbers as even numbers"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "Which of the following is a Pythagorean triple?",
+          "options": [
+            "A. (3, 4, 5)",
+            "B. (5, 12, 13)",
+            "C. (7, 24, 25)",
+            "D. All of the above"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the smallest Pythagorean triple?",
+          "options": [
+            "A. (3, 4, 5)",
+            "B. (5, 12, 13)",
+            "C. (7, 24, 25)",
+            "D. (1, 1, 1)"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "Which of the following is NOT a Pythagorean triple?",
+          "options": [
+            "A. (3, 4, 5)",
+            "B. (5, 12, 13)",
+            "C. (7, 24, 25)",
+            "D. (4, 5, 6)"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the relationship between the numbers in the list of primitive Pythagorean triples provided in the lecture notes?",
+          "options": [
+            "A. They are all in increasing order",
+            "B. They are all in decreasing order",
+            "C. They are all distinct",
+            "D. They are all multiples of each other"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "How many Pythagorean triples are listed in the lecture notes?",
+          "options": [
+            "A. 10",
+            "B. 20",
+            "C. 30",
+            "D. 50"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the largest number in the list of primitive Pythagorean triples provided in the lecture notes?",
+          "options": [
+            "A. 157",
+            "B. 169",
+            "C. 173",
+            "D. 257"
+          ],
+          "answer": "D"
+        }
+      ],
+      "metadata": {}
     }
   }
 }

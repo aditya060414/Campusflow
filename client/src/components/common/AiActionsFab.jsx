@@ -72,10 +72,10 @@ export const AiActionsFab = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-16 right-0 mb-2 w-64 rounded-2xl overflow-hidden shadow-2xl glass-panel p-3 border border-zinc-200/30 dark:border-zinc-800/40"
+            className="absolute bottom-16 right-0 mb-2 w-64 rounded-2xl overflow-hidden shadow-2xl glass-panel p-3 border border-border"
           >
-            <div className="px-3 py-2 border-b border-zinc-200/50 dark:border-zinc-800/50 mb-2">
-              <h3 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 tracking-wider uppercase flex items-center gap-1.5 font-heading">
+            <div className="px-3 py-2 border-b border-border mb-2">
+              <h3 className="text-xs font-semibold text-muted tracking-wider uppercase flex items-center gap-1.5 font-heading">
                 <Sparkles className="w-3.5 h-3.5 text-sky-500 animate-pulse" />
                 AI Actions
               </h3>
@@ -89,7 +89,7 @@ export const AiActionsFab = () => {
                     whileHover={{ x: 4, backgroundColor: "rgba(14,165,233,0.08)" }}
                     whileTap={{ scale: 0.98 }}
                     onClick={action.onClick}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm font-medium text-zinc-700 hover:text-sky-600 dark:text-zinc-300 dark:hover:text-sky-400 transition-colors"
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-sm font-medium text-txt hover:text-sky-400 transition-colors"
                   >
                     <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${action.color} text-white shadow-md`}>
                       <Icon className="w-4 h-4" />

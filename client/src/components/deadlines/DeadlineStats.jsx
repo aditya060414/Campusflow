@@ -47,7 +47,7 @@ export const DeadlineStats = ({ deadlines = [], generatedPlans = {} }) => {
       icon: Calendar,
       color: "from-blue-500 to-indigo-600",
       borderColor: "border-l-indigo-500",
-      glowClass: "bg-indigo-500/20 dark:bg-indigo-500/15",
+      glowClass: "bg-indigo-500/15",
     },
     {
       title: "Due This Week",
@@ -57,7 +57,7 @@ export const DeadlineStats = ({ deadlines = [], generatedPlans = {} }) => {
       icon: AlertCircle,
       color: "from-amber-500 to-red-500",
       borderColor: "border-l-amber-500",
-      glowClass: "bg-amber-500/20 dark:bg-amber-500/15",
+      glowClass: "bg-amber-500/15",
     },
     {
       title: "Planned Study Hours",
@@ -67,7 +67,7 @@ export const DeadlineStats = ({ deadlines = [], generatedPlans = {} }) => {
       icon: Clock,
       color: "from-sky-400 to-blue-500",
       borderColor: "border-l-sky-500",
-      glowClass: "bg-sky-500/20 dark:bg-sky-500/15",
+      glowClass: "bg-sky-500/15",
     },
     {
       title: "Completed Sessions",
@@ -77,7 +77,7 @@ export const DeadlineStats = ({ deadlines = [], generatedPlans = {} }) => {
       icon: CheckSquare,
       color: "from-emerald-400 to-teal-500",
       borderColor: "border-l-emerald-500",
-      glowClass: "bg-emerald-500/20 dark:bg-emerald-500/15",
+      glowClass: "bg-emerald-500/15",
     },
   ];
 

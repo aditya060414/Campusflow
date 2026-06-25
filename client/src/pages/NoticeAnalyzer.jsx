@@ -9,6 +9,8 @@ import {
   Send,
   Loader2,
   Clock,
+  Sparkles,
+  Check,
 } from "lucide-react";
 import { useApi } from "../hooks/useApi";
 import ragService from "../services/ragService";
@@ -60,12 +62,12 @@ export const NoticeAnalyzer = () => {
     const p = (priority || "medium").toLowerCase();
     switch (p) {
       case "high":
-        return "bg-red-50 text-red-750 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/50 animate-pulse";
+        return "bg-red-950/40 text-red-400 border-red-900/50 animate-pulse";
       case "medium":
-        return "bg-amber-50 text-amber-750 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/50";
+        return "bg-amber-950/40 text-amber-400 border-amber-900/50";
       case "low":
       default:
-        return "bg-emerald-50 text-emerald-750 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/50";
+        return "bg-emerald-950/40 text-emerald-400 border-emerald-900/50";
     }
   };
 
@@ -278,7 +280,8 @@ export const NoticeAnalyzer = () => {
                           key={idx}
                           className="flex items-start gap-2.5 text-[14px] text-txt"
                         >
-                          <span className="flex h-5 w-5 items-center justify-center rounded border border-emerald-200 bg-emerald-50 text-emerald-600 dark:border-emerald-900/50 dark:bg-emerald-950/30 dark:text-emerald-400 font-semibold text-xs shrink-0 mt-0.5">
+                          <span className="flex h-5 w-5 items-center justify-center rounded border border-emerald-900/50 bg-emerald-950/30 text-[0px] shrink-0 mt-0.5">
+                            <Check className="h-3.5 w-3.5 text-emerald-400" />
                             ✓
                           </span>
                           <span>{item}</span>
@@ -295,9 +298,9 @@ export const NoticeAnalyzer = () => {
 
               {/* Action Prompt */}
               {analysis.priority === "high" && (
-                <div className="flex gap-3 p-4 bg-red-50/50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 rounded-[4px] font-body">
-                  <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-                  <p className="text-[13px] text-red-700 dark:text-red-400 leading-relaxed">
+                <div className="flex gap-3 p-4 bg-red-950/20 border border-red-900/40 rounded-[4px] font-body">
+                  <AlertTriangle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                  <p className="text-[13px] text-red-400 leading-relaxed">
                     <strong>Action Required:</strong> This notice is flagged with <strong>High Priority</strong>. Please review the action items and dates above immediately to ensure you do not miss these academic commitments.
                   </p>
                 </div>

@@ -85,7 +85,7 @@ export const ChatMessage = ({
             </div>
           ) : (
             /* Rich Markdown Formatting Container */
-            <div className="prose prose-zinc dark:prose-invert max-w-none text-sm leading-relaxed text-txt space-y-4 font-normal">
+            <div className="prose prose-invert max-w-none text-sm leading-relaxed text-txt space-y-4 font-normal">
               <ReactMarkdown
                 components={{
                   h1: ({ node, ...props }) => (

@@ -15,6 +15,11 @@ export const AuthInput: React.FC<AuthInputProps> = ({
   className = '',
   ...props
 }) => {
+  const safePlaceholder =
+    typeof props.placeholder === 'string' && props.placeholder.includes('â')
+      ? '********'
+      : props.placeholder;
+
   return (
     <div className="space-y-1.5 w-full">
       <label className="block text-[11px] font-bold uppercase tracking-widest text-[#9CA3AF]">
@@ -28,6 +33,7 @@ export const AuthInput: React.FC<AuthInputProps> = ({
         )}
         <input
           {...props}
+          placeholder={safePlaceholder}
           className={`
             w-full h-[52px] bg-[#111318] border-2 rounded-xl text-[14px] text-[#F5F5F5] placeholder-[#6B7280]
             outline-none transition-all duration-200 shadow-sm

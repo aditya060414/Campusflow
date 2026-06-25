@@ -1,34 +1,19 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 
 export const ThemeContext = createContext(null);
 
+/**
+ * ThemeProvider – locked to dark mode.
+ * Always applies the `dark` class on <html> so that any remaining
+ * Tailwind utilities resolve correctly in the locked dark theme.
+ */
 export const ThemeProvider = ({ children }) => {
-  // Read initial theme from localStorage or default to system preference
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      return savedTheme;
-    }
-    return "dark";
-  });
-
-  // Apply theme class to document element and sync with localStorage
   useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
-  };
+    window.document.documentElement.classList.add("dark");
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, isDarkMode: theme === "dark" }}>
+    <ThemeContext.Provider value={{ theme: "dark", isDarkMode: true }}>
       {children}
     </ThemeContext.Provider>
   );
