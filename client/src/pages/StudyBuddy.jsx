@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FileText, MessageSquare, Copy, CheckSquare, GraduationCap } from "lucide-react";
+import {
+  FileText,
+  MessageSquare,
+  Copy,
+  CheckSquare,
+  GraduationCap,
+} from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
+import { useStudyBuddy } from "../context/StudyBuddyContext";
 
 // Import custom components
 import NotesUpload from "../components/studybuddy/NotesUpload";
@@ -13,48 +21,50 @@ import SubjectSelector from "../components/studybuddy/SubjectSelector";
  * and active subject scopes for all RAG microservice actions.
  */
 export const StudyBuddy = () => {
-  // Tabs: 'notes' | 'ask' | 'flashcards' | 'quiz'
-  const [activeTab, setActiveTab] = useState("notes");
-  
-  // Ingested subjects list
-  const [ingestedSubjects, setIngestedSubjects] = useState([]);
-  
-  // Active subject selected for RAG operations
-  const [activeSubject, setActiveSubject] = useState("");
+  const { student } = useAuth();
+  const { subjects, selectedSubject, selectSubject, fetchSubjects } =
+    useStudyBuddy();
 
-  // Load ingested subjects from localStorage on mount
-  useEffect(() => {
-    const savedSubjects = JSON.parse(
-      localStorage.getItem("cf_ingested_subjects") || "[]"
-    );
-    setIngestedSubjects(savedSubjects);
-    if (savedSubjects.length > 0) {
-      setActiveSubject(savedSubjects[0]);
+  // Tabs: 'notes' | 'ask' | 'flashcards' | 'quiz'
+  const [activeTab, setActiveTab] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab");
+    if (["notes", "ask", "flashcards", "quiz"].includes(tabParam)) {
+      return tabParam;
     }
-  }, []);
+    return "notes";
+  });
+
+  // Fetch subjects on mount
+  useEffect(() => {
+    if (student?.student_id) {
+      const params = new URLSearchParams(window.location.search);
+      const subjectParam = params.get("subject");
+      const targetSubjectId = subjectParam
+        ? decodeURIComponent(subjectParam).toUpperCase()
+        : null;
+
+      fetchSubjects(student.student_id, targetSubjectId);
+    }
+  }, [student, fetchSubjects]);
+
+  // Monitor search params to switch tabs dynamically
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get("tab");
+    if (tabParam && ["notes", "ask", "flashcards", "quiz"].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [window.location.search]);
 
   // Callback when a new note is successfully ingested
-  const handleNoteIngested = (newSubject) => {
-    const savedSubjects = JSON.parse(
-      localStorage.getItem("cf_ingested_subjects") || "[]"
-    );
-    
-    if (!savedSubjects.includes(newSubject)) {
-      const updated = [...savedSubjects, newSubject];
-      localStorage.setItem("cf_ingested_subjects", JSON.stringify(updated));
-      setIngestedSubjects(updated);
-      
-      // Auto-set as active subject if none was selected
-      if (!activeSubject) {
-        setActiveSubject(newSubject);
-      }
+  const handleNoteIngested = (newSubjectId) => {
+    if (student?.student_id) {
+      // Refresh subject list and automatically select the new subject
+      fetchSubjects(student.student_id, newSubjectId);
     }
-    
-    // Increment global uploaded notes count in localStorage for dashboard stats
-    const currentCount = parseInt(localStorage.getItem("cf_notes_count") || "0", 10);
-    localStorage.setItem("cf_notes_count", (currentCount + 1).toString());
-    
-    // Auto switch to Ask AI tab to let them play with it immediately!
+
+    // Auto switch to Ask AI tab to let them interact with it immediately
     setActiveTab("ask");
   };
 
@@ -66,19 +76,18 @@ export const StudyBuddy = () => {
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      
+    <div className="w-full space-y-6 pb-12 animate-fade-in font-body">
       {/* Header Panel */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 dark:border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
-            <GraduationCap className="h-6 w-6" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-[4px] bg-primary/10 text-primary border border-primary/20">
+            <GraduationCap className="h-5 w-5 stroke-[1.75]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h1 className="font-display text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-txt tracking-tight leading-tight">
               AI Study Buddy
             </h1>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-slate-400">
+            <p className="text-[14px] text-muted mt-1 font-body">
               Vectorize notes, ask questions, generate flashcards, and run quizzes.
             </p>
           </div>
@@ -87,15 +96,17 @@ export const StudyBuddy = () => {
         {/* Global Subject Selector (Only relevant for RAG tabs, not notes upload tab itself) */}
         {activeTab !== "notes" && (
           <SubjectSelector
-            subjects={ingestedSubjects}
-            activeSubject={activeSubject}
-            onChange={setActiveSubject}
+            subjects={subjects}
+            activeSubject={selectedSubject}
+            onChange={(subjectId) =>
+              selectSubject(student.student_id, subjectId)
+            }
           />
         )}
       </div>
 
       {/* Tabs Navigation */}
-      <div className="border-b border-gray-200 dark:border-slate-800">
+      <div className="border-b border-border pb-px">
         <nav className="flex flex-wrap -mb-px gap-2" aria-label="Tabs">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -104,13 +115,13 @@ export const StudyBuddy = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 border-b-2 font-medium text-sm transition-all duration-200 focus:outline-none ${
+                className={`flex items-center gap-2 px-4 py-2 border-b-2 font-bold text-sm transition-colors duration-150 focus:outline-none font-display ${
                   isActive
-                    ? "border-primary text-primary dark:border-primary-400 dark:text-primary-400 font-semibold"
-                    : "border-transparent text-gray-500 hover:text-gray-750 hover:border-gray-300 dark:text-slate-400 dark:hover:text-slate-300"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted hover:text-txt hover:border-border"
                 }`}
               >
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4 w-4 stroke-[1.75]" />
                 {tab.name}
               </button>
             );
@@ -123,20 +134,13 @@ export const StudyBuddy = () => {
         {activeTab === "notes" && (
           <NotesUpload onIngestionSuccess={handleNoteIngested} />
         )}
-        
-        {activeTab === "ask" && (
-          <AskQuestion subject={activeSubject} />
-        )}
-        
-        {activeTab === "flashcards" && (
-          <Flashcards subject={activeSubject} />
-        )}
-        
-        {activeTab === "quiz" && (
-          <QuizGenerator subject={activeSubject} />
-        )}
-      </div>
 
+        {activeTab === "ask" && <AskQuestion subject={selectedSubject} />}
+
+        {activeTab === "flashcards" && <Flashcards subject={selectedSubject} />}
+
+        {activeTab === "quiz" && <QuizGenerator subject={selectedSubject} />}
+      </div>
     </div>
   );
 };

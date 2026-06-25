@@ -9,8 +9,7 @@ export const ThemeProvider = ({ children }) => {
     if (savedTheme) {
       return savedTheme;
     }
-    const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    return systemPrefersDark ? "dark" : "light";
+    return "dark";
   });
 
   // Apply theme class to document element and sync with localStorage

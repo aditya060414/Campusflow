@@ -1,7 +1,8 @@
 const axios = require("axios");
+const FormData = require("form-data");
 
 // Retrieve RAG Microservice URL from environment
-const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || "http://localhost:8001";
+const RAG_SERVICE_URL = process.env.RAG_SERVICE_URL || "http://127.0.0.1:8001";
 
 /**
  * Handles axios communication errors and returns detailed, friendly messages.
@@ -50,15 +51,31 @@ const ragService = {
   /**
    * Ask question from notes.
    */
-  askQuestion: async (student_id, question) => {
+  askQuestion: async (student_id, question, subject) => {
     try {
       const response = await axios.post(`${RAG_SERVICE_URL}/ask`, {
         student_id,
         question,
+        subject,
       });
       return response.data;
     } catch (error) {
       handleAxiosError(error, "answering question");
+    }
+  },
+
+  /**
+   * Generate academic summary of subject notes.
+   */
+  generateSummary: async (student_id, subject) => {
+    try {
+      const response = await axios.post(`${RAG_SERVICE_URL}/generate-summary`, {
+        student_id,
+        subject,
+      });
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "generating summary");
     }
   },
 
@@ -103,6 +120,30 @@ const ragService = {
       return response.data;
     } catch (error) {
       handleAxiosError(error, "analyzing notice");
+    }
+  },
+
+  /**
+   * Upload a note file (PDF, TXT, Image) for multi-format knowledge ingestion.
+   */
+  uploadNote: async (student_id, subject, file) => {
+    try {
+      const form = new FormData();
+      form.append("student_id", student_id);
+      form.append("subject", subject);
+      form.append("file", file.buffer, {
+        filename: file.originalname,
+        contentType: file.mimetype,
+      });
+
+      const response = await axios.post(`${RAG_SERVICE_URL}/upload-note`, form, {
+        headers: {
+          ...form.getHeaders(),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      handleAxiosError(error, "file knowledge upload");
     }
   },
 };

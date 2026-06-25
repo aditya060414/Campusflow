@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const ragRoutes = require("./routes/ragRoutes");
+const deadlineRoutes = require("./routes/deadlineRoutes");
+const { router: authRoutes } = require("./routes/authRoutes");
+const { router: notificationRoutes } = require("./routes/notificationRoutes");
 
 const app = express();
 
@@ -37,6 +40,16 @@ app.get("/", (req, res) => {
 
 // Mount RAG proxy routes
 app.use("/api/rag", ragRoutes);
+
+// Mount Deadline planning routes
+app.use("/api/deadlines", deadlineRoutes);
+
+// Mount Authentication routes
+app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
+
+// Mount Notification routes
+app.use("/api/notifications", notificationRoutes);
 
 // Global Error Handling Middleware (returns required success: false schema)
 app.use((err, req, res, next) => {

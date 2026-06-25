@@ -2,15 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Theme Variables for Toaster */
+/* Custom Theme Variables for Toaster & Brutalist Colors */
 :root {
   --toast-bg: #ffffff;
   --toast-color: #111827; /* Gray 900 */
+  --bg: #fafafa;
+  --panel: #ffffff;
+  --panel2: #f4f4f5;
+  --txt: #09090b;
+  --muted: #71717a;
+  --border: #e4e4e7;
 }
 
 .dark {
   --toast-bg: #090d16; /* Slate 950 shadow background */
   --toast-color: #f8fafc; /* Slate 50 */
+  --bg: #09090b;
+  --panel: #18181b;
+  --panel2: #27272a;
+  --txt: #fafafa;
+  --muted: #a1a1aa;
+  --border: #27272a;
 }
 
 /* Custom transitions and animations */
@@ -36,7 +48,7 @@
 
 /* Base styles and custom scrollbars */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -77,4 +89,42 @@ body {
 
 .preserve-3d {
   transform-style: preserve-3d;
+}
+
+/* Drifting background blobs animations */
+@keyframes drift {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(40px, -60px) scale(1.15);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-drift {
+  animation: drift 20s ease-in-out infinite;
+}
+
+.animate-drift-reverse {
+  animation: drift 25s ease-in-out infinite reverse;
+}
+
+/* Glassmorphism classes removed in favor of standard brutalist panel styles */
+
+/* Heading Typography Overrides */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }

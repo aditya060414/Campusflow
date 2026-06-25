@@ -1,334 +1,81 @@
-# CampusFlow AI Study Buddy - RAG Microservice
+# CampusFlow — FastAPI RAG Microservice (AI Engine)
 
-CampusFlow is a production-ready, highly optimized Retrieval-Augmented Generation (RAG) microservice designed for a student productivity platform. It empowers students to upload lecture notes, ask questions from their notes, generate flashcards and multiple-choice quizzes, summarize and analyze academic notices, create tailored study plans from deadlines, and converse with a personal study mentor.
-
-Optimized for rapid hackathon demos, it features fast response times, a clean architecture, fully in-memory vector storage (no persistent database required), and seamless integration.
-
-## Tech Stack
-* **Language:** Python 3.11+
-* **API Framework:** FastAPI & Uvicorn
-* **Vector Database:** ChromaDB (In-Memory client)
-* **Embedding Model:** SentenceTransformers (`all-MiniLM-L6-v2`, initialized globally)
-* **LLM Engine:** Groq API (`llama-3.1-8b-instant` model with temperature `0.3`)
-* **Text Chunking:** LangChain RecursiveCharacterTextSplitter (chunk size: 500, overlap: 100)
-* **Validation:** Pydantic v2
+The FastAPI service is the core **Artificial Intelligence Engine** of CampusFlow. It coordinates semantic vector searches, note ingestion, text extraction (including PDF page parsing and optical character recognition on image notes), and LLM completions via Groq (Llama-3.1-8b-instant) using highly structured JSON prompt templates.
 
 ---
 
-## Project Structure
+## ⚙️ Core AI & RAG Pipeline
+
+The microservice processes academic notes and queries through the following automated workflows:
+
+### 1. Multi-Format Knowledge Ingestion
+* **Plain Text:** Ingests notes directly and chunks them semantically.
+* **PDF Ingestion:** Uses `pypdf` to parse documents page-by-page and compile their textual contents.
+* **Image Ingestion (OCR):** Employs `easyocr` to run optical character recognition on uploaded images (PNG, JPG, JPEG), extracting handwritten or printed text blocks.
+
+### 2. Semantic Chunking & Vectorization
+* **Text Partitioning:** Uses LangChain's `RecursiveCharacterTextSplitter` configured with a chunk size of `500` characters and an overlap of `100` characters to maintain context boundaries.
+* **Text Embedding:** Uses the sentence-transformers model `all-MiniLM-L6-v2` (running locally on CPU) to convert text chunks into 384-dimensional dense semantic vectors.
+* **Vector Storage:** Indexes the embeddings and source metadata in an in-memory `ChromaDB` collection.
+
+### 3. Semantic Retrieval & LLM completion
+* **Context Harvesting:** When a student asks a question, the engine embed-queries ChromaDB, retrieving the top `8` most relevant context chunks.
+* **System Prompt Constraints:** Instructs the LLM to classify answers strictly as `notes` (notes-based), `hybrid` (partially from notes + expanded), or `general` (not found in notes but helpful general knowledge).
+* **Low-Latency Completer:** Communicates with the Groq API utilizing `llama-3.1-8b-instant` to generate responses in strict JSON format.
+
+---
+
+## 📁 File Directory
+
 ```text
 rag_service/
-├── main.py             # FastAPI App, routing, and error handling
-├── rag.py              # Embedding generation, ChromaDB ingestion, retrieval, and chat history
-├── models.py           # Pydantic validation schemas (requests & responses)
-├── prompts.py          # Centralized LLM prompt templates
-├── utils.py            # Groq API client helper and robust JSON parsing/sanitization utilities
-├── requirements.txt    # Python dependencies
-├── .env.example        # Environment variable template
-└── README.md           # Documentation & instructions (this file)
+├── main.py             # FastAPI web routers & Pydantic request/response models
+├── rag.py              # In-memory ChromaDB client, SentenceTransformer embedder, & retrieve/ingest logic
+├── prompts.py          # Groq system prompts and strict JSON completion templates
+├── utils.py            # HTTP client for Groq completions with clean JSON parsing
+├── models.py           # Pydantic schema validation layers
+└── requirements.txt    # Python library dependency manifests
 ```
 
 ---
 
-## Setup Instructions
+## 🔌 Core Microservice REST Endpoints
 
-### 1. Clone or Navigate to the Directory
-Ensure you are in the `rag_service` directory:
-```bash
-cd campusflow/rag_service
-```
+All endpoints are hosted on port `8001` and receive/respond with structured JSON payloads:
 
-### 2. Create and Activate a Virtual Environment
-It is highly recommended to use a virtual environment to manage dependencies:
+* `POST /ingest`: Ingests and vectorizes plain text notes.
+* `POST /upload-note`: Ingests PDF, TXT, or Image files, performs OCR/parsing, runs topic extraction, and vectorizes.
+* `POST /ask`: Performs semantic retrieval and returns a structured answer with cited context chunks.
+* `POST /flashcards`: Generates exactly 10 flashcards, each rated with an AI difficulty (`easy`, `medium`, `hard`).
+* `POST /quiz`: Generates 10 multiple-choice questions (MCQs) with 4 options and a correct key.
+* `POST /notice/analyze`: Performs notices circular parsing, returning priority levels, key dates, action steps, estimated reading time, and recommended actions.
+* `POST /study-plan`: Formulates a daily calendar study schedule leading up to an exam deadline.
+* `POST /chat`: Employs conversational history memory to act as a supportive study coach.
+
+---
+
+## 🚀 Environment Setup & Startup
+
+To run the FastAPI engine locally:
+
 ```bash
-# On Windows:
+# 1. Create a virtual environment
 python -m venv venv
-venv\Scripts\activate
 
-# On macOS/Linux:
-python3 -m venv venv
-source venv/bin/activate
-```
+# 2. Activate virtual environment
+# Windows PowerShell:
+.\venv\Scripts\Activate.ps1
+# macOS / Linux:
+# source venv/bin/activate
 
-### 3. Install Dependencies
-Install all required packages from `requirements.txt`:
-```bash
+# 3. Install core dependencies
 pip install -r requirements.txt
-```
 
-### 4. Configure Environment Variables
-Copy the `.env.example` to `.env` and fill in your Groq API key:
-```bash
-# Windows Command Prompt / PowerShell:
-copy .env.example .env
+# 4. Configure Groq API Key
+# Create a .env file containing:
+# GROQ_API_KEY=your_groq_api_key_here
 
-# Linux/macOS:
-cp .env.example .env
-```
-Open the `.env` file and set your key:
-```env
-GROQ_API_KEY=gsk_your_actual_groq_api_key_here
-```
-*Note: If the key is missing, the server will start successfully but will return clean HTTP 500 errors on LLM-dependent endpoints, prompting you to configure it.*
-
-### 5. Run the Application
-Start the FastAPI development server using Uvicorn on port `8001`:
-```bash
+# 5. Start the Uvicorn dev server on port 8001
 uvicorn main:app --reload --port 8001
 ```
-The interactive Swagger API documentation will be available at: **http://127.0.0.1:8001/docs**
-
----
-
-## API Endpoints & Curl Examples
-
-### 1. Health Check
-* **Endpoint:** `GET /health`
-* **Purpose:** Checks system status and verifies if the Groq API key is loaded.
-* **Curl Example:**
-  ```bash
-  curl -X GET "http://127.0.0.1:8001/health"
-  ```
-* **Sample Output:**
-  ```json
-  {
-    "status": "healthy",
-    "groq_api_key_configured": true,
-    "timestamp": "2026-06-24T17:10:00.123456"
-  }
-  ```
-
----
-
-### 2. Note Ingestion
-* **Endpoint:** `POST /ingest`
-* **Purpose:** Splits text into semantic chunks, creates vector embeddings, deletes any previous notes for the same student + subject combination, and stores the new notes in the vector database.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/ingest" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "student_id": "student_123",
-         "subject": "OS",
-         "notes": "Operating System (OS) is a software that acts as an interface between computer hardware components and the user. A deadlock occurs when two or more processes are unable to proceed because each is waiting for the other to release a resource. The four necessary conditions for deadlock to occur are Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. Deadlock can be prevented by breaking one of these four conditions, or avoided using algorithms like Banker'\''s Algorithm."
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  {
-    "status": "success",
-    "chunks_stored": 2
-  }
-  ```
-
----
-
-### 3. Ask Questions
-* **Endpoint:** `POST /ask`
-* **Purpose:** Performs semantic search over the student's notes, compiles context from the top 8 chunks, and answers the query based ONLY on the notes.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/ask" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "student_id": "student_123",
-         "question": "What is a deadlock and what are its four necessary conditions?"
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  {
-    "answer": "A deadlock occurs when two or more processes are unable to proceed because each is waiting for another process to release a resource. The four necessary conditions for deadlock to occur are:\n1. Mutual Exclusion\n2. Hold and Wait\n3. No Preemption\n4. Circular Wait.",
-    "sources": 2
-  }
-  ```
-
----
-
-### 4. Flashcard Generator
-* **Endpoint:** `POST /flashcards`
-* **Purpose:** Retrieves the student's subject notes and generates exactly 10 flashcards (question/answer pairs) returned as a strict JSON array.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/flashcards" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "student_id": "student_123",
-         "subject": "OS"
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  [
-    {
-      "question": "What is an Operating System?",
-      "answer": "A software that acts as an interface between computer hardware components and the user."
-    },
-    {
-      "question": "What is a deadlock?",
-      "answer": "A situation where two or more processes cannot proceed because they are waiting on resources held by each other."
-    },
-    ...
-  ]
-  ```
-
----
-
-### 5. Multiple Choice Quiz Generator
-* **Endpoint:** `POST /quiz`
-* **Purpose:** Retrieves the student's subject notes and generates exactly 10 multiple-choice questions (MCQs) with 4 options and the correct answer letter.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/quiz" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "student_id": "student_123",
-         "subject": "OS"
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  [
-    {
-      "question": "Which of the following is NOT one of the four necessary conditions for a deadlock to occur?",
-      "options": [
-        "A) Mutual Exclusion",
-        "B) Hold and Wait",
-        "C) Preemption",
-        "D) Circular Wait"
-      ],
-      "answer": "C"
-    },
-    ...
-  ]
-  ```
-
----
-
-### 6. Notice Summarizer
-* **Endpoint:** `POST /summarize`
-* **Purpose:** Summarizes administrative or academic notices into exactly 3 bullet points starting with `•`, with each bullet under 20 words. Returns plain text.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/summarize" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "notice_text": "Attention all students, the mid-semester examination for the Operating Systems course has been scheduled for July 5th, 2026. The exam will start at 10:00 AM in Hall A. Students must carry their university ID cards and are advised to arrive 30 minutes prior to the scheduled time. Scientific calculators are permitted, but programmable devices or mobile phones are strictly prohibited. Safe seating plans will be displayed outside the hall on the day of the exam. For any syllabus queries, contact the course coordinator before July 1st."
-       }'
-  ```
-* **Sample Output:**
-  ```text
-  • Mid-semester exam scheduled for July 5th, 2026 at 10:00 AM in Hall A.
-  • Students must bring university ID cards and arrive 30 minutes early.
-  • Calculators are allowed, but phones and programmable devices are strictly prohibited.
-  ```
-
----
-
-### 7. Notice Analyzer
-* **Endpoint:** `POST /notice/analyze`
-* **Purpose:** Analyzes notice text and extracts a structured JSON object containing a summary, important dates, action items, and a priority level (low, medium, or high).
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/notice/analyze" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "notice_text": "Attention all students, the mid-semester examination for the Operating Systems course has been scheduled for July 5th, 2026. The exam will start at 10:00 AM in Hall A. Students must carry their university ID cards and are advised to arrive 30 minutes prior to the scheduled time. Scientific calculators are permitted, but programmable devices or mobile phones are strictly prohibited. Safe seating plans will be displayed outside the hall on the day of the exam. For any syllabus queries, contact the course coordinator before July 1st."
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  {
-    "summary": "The Operating Systems mid-semester exam is scheduled for July 5th, 2026 at 10:00 AM in Hall A, with specific conduct rules.",
-    "important_dates": [
-      "July 5th, 2026 (Exam Date)",
-      "July 1st, 2026 (Deadline to contact coordinator)"
-    ],
-    "action_items": [
-      "Carry university ID card to the exam.",
-      "Arrive 30 minutes prior to 10:00 AM.",
-      "Ensure any syllabus queries are addressed before July 1st."
-    ],
-    "priority": "high"
-  }
-  ```
-
----
-
-### 8. Study Plan Generator
-* **Endpoint:** `POST /study-plan`
-* **Purpose:** Automatically builds a daily study timeline leading to a deadline date. It spreads the workload evenly, prioritizes difficult concepts first, and schedules tasks day-by-day.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/study-plan" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "topic": "Database Management Systems (DBMS)",
-         "deadline": "2026-07-01",
-         "hours_per_day": 2
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  {
-    "plan": [
-      {
-        "date": "2026-06-25",
-        "task": "Study relational model and relational algebra fundamentals (difficult, core concept)."
-      },
-      {
-        "date": "2026-06-26",
-        "task": "Learn database normalization theory: 1NF, 2NF, 3NF, and BCNF (difficult, core concept)."
-      },
-      {
-        "date": "2026-06-27",
-        "task": "Study SQL queries, joins, subqueries, and aggregate functions."
-      },
-      {
-        "date": "2026-06-28",
-        "task": "Understand transactions, ACID properties, and concurrency control."
-      },
-      {
-        "date": "2026-06-29",
-        "task": "Learn indexing, hashing, and database storage structures."
-      },
-      {
-        "date": "2026-06-30",
-        "task": "Comprehensive review of all topics and practice previous years' exam questions."
-      }
-    ]
-  }
-  ```
-
----
-
-### 9. Study Mentor Chat (Bonus Feature)
-* **Endpoint:** `POST /chat`
-* **Purpose:** A session-based chatbot that retrieves the student's notes, maintains conversational history in-memory for the current session, and responds in the tone of an encouraging and empathetic study mentor.
-* **Curl Example:**
-  ```bash
-  curl -X POST "http://127.0.0.1:8001/chat" \
-       -H "Content-Type: application/json" \
-       -d '{
-         "student_id": "student_123",
-         "message": "Can you explain deadlocks simply and tell me how I can explain it in my exam?"
-       }'
-  ```
-* **Sample Output:**
-  ```json
-  {
-    "response": "Hello! I would be happy to explain deadlocks simply. Think of a deadlock like a traffic gridlock where four cars arrive at an intersection at the exact same time, and each car is blocking the next one. No one can move forward because everyone is waiting for someone else to move. In computers, it happens when Process A holds Resource 1 and waits for Resource 2, while Process B holds Resource 2 and waits for Resource 1. Neither can finish! For your exam, you can explain it using this simple 'hold-and-wait' example, and be sure to list the four necessary conditions: Mutual Exclusion, Hold and Wait, No Preemption, and Circular Wait. You've got this!"
-  }
-  ```
-
----
-
-## Error Handling
-
-The microservice implements rigorous error validation and maps failures to standard HTTP responses:
-* **Missing API Key:** If `GROQ_API_KEY` is not present in `.env`, calling any RAG or utility endpoint returns:
-  * Status code: `500 Internal Server Error`
-  * Body: `{"detail": "Groq API key is missing or not configured. Please add GROQ_API_KEY to your .env file."}`
-* **Empty Notes or Queries:** Returns `400 Bad Request`.
-* **Database Failures:** Catches and returns `500 Internal Server Error`.
-* **Invalid JSON from LLM:** If the LLM output fails to parse, it will return `502 Bad Gateway` detailing the parsing error.
+*Access the interactive API Swagger documentation by navigating to **http://localhost:8001/docs**.*

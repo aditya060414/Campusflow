@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import AiActionsFab from "../common/AiActionsFab";
 
 /**
  * Layout wrapper for all dashboard sub-pages.
- * Manages responsive grids, collapsible menu states,
- * and maintains consistent background colors.
+ * Establishes a single connected workspace with a fixed sidebar and main content.
+ * Features a seamless T-junction alignment between the sidebar and top navbar.
  */
 export const DashboardLayout = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -20,25 +21,28 @@ export const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="flex h-screen w-screen overflow-hidden bg-bg text-txt font-body transition-colors duration-150">
       
-      {/* 1. Sidebar Navigation */}
+      {/* 1. Sidebar Navigation (Fixed width on desktop, collapsible on mobile) */}
       <Sidebar isOpen={isMobileSidebarOpen} onClose={closeMobileSidebar} />
 
-      {/* 2. Main content area (shifted right on desktop) */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
+      {/* 2. Main content area (starts immediately beside the sidebar) */}
+      <div className="flex-grow flex flex-col h-full overflow-hidden relative">
         
-        {/* Top Navbar */}
+        {/* Top Navbar (Fixed height of 72px) */}
         <Navbar onMobileMenuToggle={toggleMobileSidebar} />
         
-        {/* Scrollable Page Content */}
-        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
-          <div className="mx-auto max-w-7xl w-full">
+        {/* Scrollable Page Content (Consistent padding: 16px mobile, 20px tablet, 24px desktop) */}
+        <main className="flex-grow overflow-y-auto p-4 sm:p-5 md:p-6 bg-bg">
+          <div className="mx-auto max-w-[1400px] w-full">
             <Outlet />
           </div>
         </main>
         
       </div>
+
+      {/* Global AI Actions Floating Action Button */}
+      <AiActionsFab />
     </div>
   );
 };

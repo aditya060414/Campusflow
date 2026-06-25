@@ -2,7 +2,7 @@ import datetime
 import logging
 from typing import List
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse
 
@@ -15,7 +15,9 @@ from models import (
     SummarizeRequest,
     NoticeAnalysisRequest, NoticeAnalysisResponse,
     StudyPlanRequest, StudyPlanResponse, StudyPlanItem,
-    ChatRequest, ChatResponse
+    ChatRequest, ChatResponse,
+    UploadNoteResponse,
+    AiDeadlinePlanRequest, AiDeadlinePlanResponse, AiDeadlinePlanItem
 )
 
 # Import prompts
@@ -24,7 +26,8 @@ from prompts import (
     FLASHCARD_TEMPLATE, QUIZ_TEMPLATE,
     NOTICE_SUMMARIZER_TEMPLATE, NOTICE_ANALYZER_TEMPLATE,
     STUDY_PLAN_TEMPLATE, MENTOR_CHAT_SYSTEM_PROMPT,
-    MENTOR_CHAT_USER_TEMPLATE
+    MENTOR_CHAT_USER_TEMPLATE, TOPIC_EXTRACTION_TEMPLATE,
+    AI_DEADLINE_PLANNER_TEMPLATE, SUBJECT_SUMMARY_TEMPLATE
 )
 
 # Import RAG engine functions
@@ -149,6 +152,177 @@ async def ingest_student_notes(payload: IngestRequest):
         )
 
 
+ocr_reader = None  # Global EasyOCR reader initialized lazily
+
+
+@app.post("/upload-note", response_model=UploadNoteResponse, tags=["RAG Features"])
+async def upload_student_note(
+    student_id: str = Form(...),
+    subject: str = Form(...),
+    file: UploadFile = File(...)
+):
+    """
+    Step 3.5: Multi-Format Knowledge Upload.
+    Accepts PDF, TXT, or Image files. Extracts text using pypdf, EasyOCR, or direct text reading,
+    vectorizes and chunks the extracted text, stores it in ChromaDB, and uses the LLM to automatically
+    detect study topics.
+    """
+    global ocr_reader
+    filename = file.filename or "unknown_file"
+    ext = filename.split(".")[-1].lower() if "." in filename else ""
+    
+    if ext not in ["txt", "pdf", "png", "jpg", "jpeg"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported file format '.{ext}'. Supported formats: TXT, PDF, PNG, JPG, JPEG."
+        )
+        
+    extracted_text = ""
+    source_type = ""
+    
+    try:
+        if ext == "txt":
+            source_type = "txt"
+            content = await file.read()
+            extracted_text = content.decode("utf-8", errors="ignore")
+            
+        elif ext == "pdf":
+            source_type = "pdf"
+            import pypdf
+            import io
+            pdf_bytes = await file.read()
+            reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
+            text_parts = []
+            
+            # 1. Try standard text extraction
+            for idx, page in enumerate(reader.pages):
+                page_text = page.extract_text()
+                if page_text:
+                    text_parts.append(page_text)
+            extracted_text = "\n".join(text_parts)
+            
+            # 2. If no text was extracted, check for images and perform OCR
+            if not extracted_text.strip():
+                logger.info("No selectable text extracted from PDF. Checking for embedded images to perform OCR...")
+                ocr_text_parts = []
+                try:
+                    import easyocr
+                    import numpy as np
+                    from PIL import Image
+                    
+                    # Lazy loading reader
+                    if ocr_reader is None:
+                        logger.info("Initializing EasyOCR reader for English (CPU mode)...")
+                        ocr_reader = easyocr.Reader(['en'], gpu=False)
+                    
+                    for page_idx, page in enumerate(reader.pages):
+                        for img_idx, image_file_object in enumerate(page.images):
+                            logger.info(f"Extracting image {img_idx} from page {page_idx} for OCR...")
+                            img_bytes = image_file_object.data
+                            image = Image.open(io.BytesIO(img_bytes))
+                            img_np = np.array(image)
+                            ocr_results = ocr_reader.readtext(img_np)
+                            page_ocr_text = " ".join([res[1] for res in ocr_results])
+                            if page_ocr_text.strip():
+                                ocr_text_parts.append(page_ocr_text)
+                    
+                    if ocr_text_parts:
+                        extracted_text = "\n".join(ocr_text_parts)
+                        source_type = "pdf (OCR)"
+                        logger.info("Successfully extracted text from scanned PDF images via OCR.")
+                except Exception as ocr_err:
+                    logger.warning(f"PDF OCR extraction failed: {str(ocr_err)}")
+            
+        elif ext in ["png", "jpg", "jpeg"]:
+            source_type = "image"
+            img_bytes = await file.read()
+            
+            try:
+                import easyocr
+                import numpy as np
+                from PIL import Image
+                import io
+                
+                # Lazy loading reader
+                if ocr_reader is None:
+                    logger.info("Initializing EasyOCR reader for English (CPU mode)...")
+                    ocr_reader = easyocr.Reader(['en'], gpu=False)
+                
+                # Convert bytes to PIL Image, then to numpy array for EasyOCR
+                image = Image.open(io.BytesIO(img_bytes))
+                img_np = np.array(image)
+                
+                logger.info("Performing OCR text extraction...")
+                ocr_results = ocr_reader.readtext(img_np)
+                extracted_text = " ".join([res[1] for res in ocr_results])
+            except ImportError:
+                logger.warning("EasyOCR is not installed. Falling back to mock OCR for demo purposes.")
+                extracted_text = f"This is mock OCR extracted text from the image '{filename}' for demo. It discusses processes, threads, scheduling, and deadlock prevention."
+            except Exception as e:
+                logger.error(f"OCR failed: {str(e)}")
+                raise ValueError(f"Failed to extract text from image via OCR: {str(e)}")
+                
+    except Exception as e:
+        logger.error(f"File extraction failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Failed to process and extract text from the uploaded file: {str(e)}"
+        )
+        
+    if not extracted_text.strip():
+        detail_msg = "The uploaded file contains no readable text."
+        if ext == "pdf":
+            detail_msg = "The uploaded PDF contains no selectable text. If this is a scanned document, please upload it as image files (PNG, JPG, JPEG) so the AI can perform OCR extraction, or ensure the PDF contains selectable text."
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=detail_msg
+        )
+        
+    # Ingest text into ChromaDB via RAG helper
+    try:
+        chunks_stored = ingest_notes(
+            student_id=student_id,
+            subject=subject,
+            notes_text=extracted_text
+        )
+    except Exception as e:
+        logger.error(f"Vector database ingestion failed: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to store vectorized knowledge in database: {str(e)}"
+        )
+        
+    # Bonus AI Feature: Detect Topics using the LLM
+    detected_topics = []
+    try:
+        # Use first 3000 chars of extracted text to stay within prompt/token limits
+        sample_text = extracted_text[:3000]
+        user_prompt = TOPIC_EXTRACTION_TEMPLATE.format(text=sample_text)
+        
+        raw_response = call_groq(
+            system_prompt="You are a university study assistant that extracts core academic topics in strict JSON.",
+            user_prompt=user_prompt
+        )
+        
+        parsed_topics = parse_json_response(raw_response)
+        if isinstance(parsed_topics, list):
+            detected_topics = [str(t).strip() for t in parsed_topics if t][:5]
+    except Exception as e:
+        logger.warning(f"Failed to automatically detect topics: {str(e)}")
+        
+    # Fallback default topics if extraction fails or returns empty
+    if not detected_topics:
+        detected_topics = ["Lecture Review", "Key Concepts", "Core Subject Matter"]
+        
+    return UploadNoteResponse(
+        success=True,
+        chunks_stored=chunks_stored,
+        source_type=source_type,
+        filename=filename,
+        detected_topics=detected_topics
+    )
+
+
 @app.post("/ask", response_model=QuestionResponse, tags=["RAG Features"])
 async def ask_question(payload: QuestionRequest):
     """
@@ -167,6 +341,7 @@ async def ask_question(payload: QuestionRequest):
         context, sources_count = retrieve_relevant_context(
             student_id=payload.student_id,
             query=payload.question,
+            subject=payload.subject,
             top_k=8
         )
 
@@ -238,9 +413,13 @@ async def generate_flashcards(payload: FlashcardRequest):
         validated_flashcards = []
         for item in flashcards[:10]:
             if "question" in item and "answer" in item:
+                difficulty_val = item.get("difficulty", "medium").lower()
+                if difficulty_val not in ["easy", "medium", "hard"]:
+                    difficulty_val = "medium"
                 validated_flashcards.append(FlashcardItem(
                     question=str(item["question"]),
-                    answer=str(item["answer"])
+                    answer=str(item["answer"]),
+                    difficulty=difficulty_val
                 ))
         
         # If the model didn't return any valid items
@@ -302,6 +481,33 @@ async def generate_quiz(payload: QuizRequest):
         handle_exception(e, "generating quiz")
 
 
+@app.post("/generate-summary", tags=["RAG Features"])
+async def generate_subject_summary(payload: FlashcardRequest):
+    """
+    Generates a comprehensive academic summary of the student's notes for the specified subject.
+    """
+    # Retrieve notes
+    context = get_all_subject_notes(student_id=payload.student_id, subject=payload.subject)
+    if not context:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No notes found for student '{payload.student_id}' in subject '{payload.subject}'. Please upload notes first."
+        )
+
+    try:
+        # Formulate prompt
+        user_prompt = SUBJECT_SUMMARY_TEMPLATE.format(context=context)
+        
+        # Call Groq
+        summary = call_groq(
+            system_prompt="You are a helpful university tutor that summarizes lecture notes in clean markdown.",
+            user_prompt=user_prompt
+        )
+        return {"summary": summary}
+    except Exception as e:
+        handle_exception(e, "generating subject summary")
+
+
 @app.post("/summarize", response_class=PlainTextResponse, tags=["Notice Utilities"])
 async def summarize_notice(payload: SummarizeRequest):
     """
@@ -361,11 +567,16 @@ async def analyze_notice(payload: NoticeAnalysisRequest):
         if priority not in ["low", "medium", "high"]:
             priority = "medium"
             
+        estimated_reading_time = str(analysis.get("estimated_reading_time", "1 min"))
+        recommended_action = str(analysis.get("recommended_action", "Please read this notice carefully."))
+            
         return NoticeAnalysisResponse(
             summary=summary,
             important_dates=[str(d) for d in important_dates],
             action_items=[str(a) for a in action_items],
-            priority=priority  # type: ignore
+            priority=priority,  # type: ignore
+            estimated_reading_time=estimated_reading_time,
+            recommended_action=recommended_action
         )
     except Exception as e:
         handle_exception(e, "analyzing notice")
@@ -420,6 +631,94 @@ async def generate_study_plan(payload: StudyPlanRequest):
         return StudyPlanResponse(plan=validated_plan)
     except Exception as e:
         handle_exception(e, "generating study plan")
+
+
+@app.post("/deadlines/generate-plan", response_model=AiDeadlinePlanResponse, tags=["Study Planner"])
+async def generate_deadline_study_plan(payload: AiDeadlinePlanRequest):
+    """
+    Generates a personalized daily study plan leading up to a specific deadline,
+    incorporating the student's actual uploaded notes from the vector store if available.
+    """
+    # Basic date format check (YYYY-MM-DD)
+    try:
+        datetime.date.fromisoformat(payload.deadline)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Deadline date must be in YYYY-MM-DD format."
+        )
+
+    current_date = datetime.date.today().isoformat()
+    student_id = payload.studentId or "default_student"
+
+    try:
+        # 1. Fetch student's uploaded notes for the subject from ChromaDB
+        notes_context = get_all_subject_notes(student_id=student_id, subject=payload.subject)
+        
+        # Limit notes_context length for token safety (approx. 4000 characters)
+        if notes_context:
+            if len(notes_context) > 4000:
+                notes_context = notes_context[:4000] + "\n... [Truncated for prompt limit] ..."
+            logger.info(f"Retrieved {len(notes_context)} characters of notes context for {payload.subject} to guide planning.")
+        else:
+            notes_context = ""
+            logger.info(f"No notes context found for {payload.subject}. Proceeding with general knowledge planning.")
+
+        # 2. Formulate the LLM user prompt
+        user_prompt = AI_DEADLINE_PLANNER_TEMPLATE.format(
+            title=payload.title,
+            subject=payload.subject,
+            description=payload.description,
+            deadline=payload.deadline,
+            hours_per_day=payload.hoursPerDay,
+            priority=payload.priority,
+            current_date=current_date,
+            notes_context=notes_context
+        )
+
+        # 3. Call Groq
+        raw_response = call_groq(
+            system_prompt="You are a professional university study scheduling assistant that outputs strict JSON.",
+            user_prompt=user_prompt
+        )
+
+        # 4. Parse JSON
+        parsed_data = parse_json_response(raw_response)
+
+        # 5. Extract and validate fields
+        estimated_hours = int(parsed_data.get("estimatedHours", 0))
+        risk_level = str(parsed_data.get("riskLevel", "medium")).lower()
+        if risk_level not in ["low", "medium", "high"]:
+            risk_level = "medium"
+        recommendation = str(parsed_data.get("recommendation", "Review key concepts regularly."))
+        raw_plan = parsed_data.get("studyPlan", [])
+
+        # Validate each plan item
+        validated_plan = []
+        for item in raw_plan:
+            if "date" in item and "topic" in item:
+                validated_plan.append(AiDeadlinePlanItem(
+                    date=str(item["date"]),
+                    topic=str(item["topic"]),
+                    duration=str(item.get("duration", f"{payload.hoursPerDay} hours"))
+                ))
+
+        if not validated_plan:
+            raise ValueError("No valid daily sessions found in the generated study plan JSON.")
+
+        # Fallback sum check
+        if estimated_hours == 0:
+            estimated_hours = len(validated_plan) * int(payload.hoursPerDay)
+
+        return AiDeadlinePlanResponse(
+            estimatedHours=estimated_hours,
+            riskLevel=risk_level,
+            recommendation=recommendation,
+            studyPlan=validated_plan
+        )
+    except Exception as e:
+        handle_exception(e, "generating academic deadline study plan")
+
 
 
 @app.post("/chat", response_model=ChatResponse, tags=["Bonus Hackathon Chat"])

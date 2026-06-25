@@ -27,14 +27,14 @@ export const QuizCard = ({
   };
 
   return (
-    <div className="p-6 bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-2xl shadow-sm transition-colors duration-300 space-y-4">
+    <div className="p-6 bg-panel border border-border rounded-lg space-y-4">
       
       {/* Question Header */}
       <div className="space-y-1.5">
-        <span className="text-xs font-semibold text-primary dark:text-primary-400 uppercase tracking-wider">
+        <span className="text-xs font-bold text-primary uppercase tracking-wider">
           Question {index + 1}
         </span>
-        <h4 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white leading-relaxed">
+        <h4 className="text-sm sm:text-base font-bold text-txt leading-relaxed">
           {question}
         </h4>
       </div>
@@ -46,25 +46,25 @@ export const QuizCard = ({
           const isSelected = selectedOption === letter;
           const isCorrect = correctAnswer === letter;
           
-          let optionStyles = "border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-gray-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-850";
+          let optionStyles = "border-border bg-panel text-txt hover:bg-panel2";
           let IndicatorIcon = null;
 
           if (showAnswers) {
             if (isCorrect) {
               // Highlight correct answer in Green
-              optionStyles = "border-emerald-500 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/60 font-semibold";
+              optionStyles = "border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold";
               IndicatorIcon = <Check className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />;
             } else if (isSelected && !isCorrect) {
               // Highlight selected incorrect answer in Red
-              optionStyles = "border-red-500 bg-red-50 text-red-800 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/60 font-semibold";
+              optionStyles = "border-red-500 bg-red-500/10 text-red-600 dark:text-red-400 font-bold";
               IndicatorIcon = <X className="h-4 w-4 text-red-600 dark:text-red-400 shrink-0" />;
             } else {
               // Gray out other unselected incorrect answers
-              optionStyles = "border-gray-200 dark:border-slate-900 bg-gray-50/50 dark:bg-slate-950/40 text-gray-400 dark:text-slate-650 cursor-not-allowed";
+              optionStyles = "border-border bg-panel text-muted opacity-50 cursor-not-allowed";
             }
           } else if (isSelected) {
             // Selected option styling before answers are shown
-            optionStyles = "border-primary bg-sky-50/40 text-primary dark:border-primary-400 dark:bg-sky-950/25 dark:text-primary-400 font-semibold ring-2 ring-primary/10 dark:ring-primary-450/10";
+            optionStyles = "border-primary bg-panel2 text-primary font-bold";
           }
 
           return (
@@ -73,13 +73,13 @@ export const QuizCard = ({
               type="button"
               disabled={showAnswers}
               onClick={() => onSelectOption(letter)}
-              className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-left text-xs sm:text-sm transition-all duration-250 focus:outline-none ${optionStyles}`}
+              className={`w-full flex items-center justify-between p-3.5 rounded-[4px] border text-left text-xs sm:text-sm transition-colors duration-150 focus:outline-none ${optionStyles}`}
             >
               <div className="flex items-center gap-3">
-                <span className={`flex h-6 w-6 items-center justify-center rounded-lg text-xs font-bold shrink-0 ${
+                <span className={`flex h-6 w-6 items-center justify-center rounded-[4px] text-xs font-bold shrink-0 ${
                   isSelected 
-                    ? "bg-primary text-white dark:bg-primary-400 dark:text-slate-950" 
-                    : "bg-gray-100 dark:bg-slate-800 text-gray-500 dark:text-slate-400"
+                    ? "bg-primary text-white" 
+                    : "bg-panel2 text-muted border border-border"
                 }`}>
                   {letter}
                 </span>
@@ -94,7 +94,7 @@ export const QuizCard = ({
 
       {/* Show answers validation notice */}
       {showAnswers && !selectedOption && (
-        <p className="flex items-center gap-1 text-[11px] text-amber-600 dark:text-amber-450 font-medium">
+        <p className="flex items-center gap-1 text-[11px] text-amber-600 dark:text-amber-400 font-bold">
           <AlertCircle className="h-3.5 w-3.5" />
           You did not answer this question.
         </p>

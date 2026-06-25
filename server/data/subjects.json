@@ -1,0 +1,394 @@
+{
+  "2462018": {
+    "MATH": {
+      "id": "MATH",
+      "name": "MATH",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "Pythagorean-Triples-List.pdf"
+      ],
+      "summary": "**Pythagorean Triples**\n=======================\n\n**Overview**\n------------\n\nPythagorean triples are sets of three positive integers a, b, and c, such that a^2 + b^2 = c^2. This equation represents the Pythagorean theorem, which is a fundamental concept in geometry.\n\n**Core Concepts**\n----------------\n\n* **Pythagorean Theorem**: a^2 + b^2 = c^2\n* **Primitive Pythagorean Triples**: Pythagorean triples where a, b, and c have no common factors other than 1\n* **Pythagorean Triple List**: A list of primitive Pythagorean triples of numbers from 1 to 300\n\n**Major Topics**\n----------------\n\n### 1. **Pythagorean Theorem**\n\n* The Pythagorean theorem is a fundamental concept in geometry\n* It states that in a right-angled triangle, the square of the length of the hypotenuse (c) is equal to the sum of the squares of the lengths of the other two sides (a and b)\n\n### 2. **Primitive Pythagorean Triples**\n\n* A primitive Pythagorean triple is a set of three positive integers a, b, and c, such that a^2 + b^2 = c^2 and a, b, and c have no common factors other than 1\n* Examples of primitive Pythagorean triples include (3, 4, 5) and (5, 12, 13)\n\n### 3. **Pythagorean Triple List**\n\n* The Pythagorean triple list is a list of primitive Pythagorean triples of numbers from 1 to 300\n* The list includes 40 primitive Pythagorean triples, including (3, 4, 5), (5, 12, 13), and (8, 15, 17)\n\n**Key Takeaways**\n-----------------\n\n* Pythagorean triples are sets of three positive integers a, b, and c, such that a^2 + b^2 = c^2\n* Primitive Pythagorean triples have no common factors other than 1\n* The Pythagorean triple list is a list of primitive Pythagorean triples of numbers from 1 to 300\n\n**Practice Questions**\n----------------------\n\n* Find the next primitive Pythagorean triple after (3, 4, 5)\n* Determine if the triple (6, 8, 10) is a primitive Pythagorean triple\n* Find the sum of the squares of the lengths of the sides of the right-angled triangle with sides of length 5, 12, and 13.",
+      "chatHistory": [],
+      "flashcards": [],
+      "quizzes": [],
+      "metadata": {}
+    },
+    "AREA": {
+      "id": "AREA",
+      "name": "AREA",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "area.png"
+      ],
+      "summary": "**Mathematics Lecture Notes Summary**\n=====================================\n\n### 1. Area of 2D Shapes\n\n* **Trapezium**: Area = 1/2 (sum of parallel sides) × perpendicular distance between them\n* **Rhombus**: Area = 1/2 (product of diagonals)\n\n### 2. Surface Area of 3D Solids\n\n* **Surface Area**: Sum of the areas of all faces of a solid\n* **Cuboid**: Surface Area = 2(lb + bh + hl)\n* **Cube**: Surface Area = 6a^2\n* **Cylinder**: Surface Area = 2πr(r + h)\n\n### 3. Volume of 3D Solids\n\n* **Volume**: Amount of region occupied by a solid\n* **Cuboid**: Volume = l × b × h\n* **Cube**: Volume = a^3\n* **Cylinder**: Volume = πr^2h\n\n### 4. Conversion of Units\n\n* 1 cm^3 = 1 mL\n* 1 m^3 = 1000000 cm^3\n* 1 m^3 = 1000 L\n* 1 L = 1000 cm^3\n\n### Key Takeaways\n\n* The area of a trapezium and rhombus can be calculated using specific formulas.\n* The surface area of a 3D solid is the sum of the areas of all its faces.\n* The volume of a 3D solid is the amount of region it occupies.\n* Conversion of units between cubic centimeters (cm^3), milliliters (mL), cubic meters (m^3), and liters (L) is essential in calculations.\n\n### Practice Tips\n\n* Practice calculating the area and surface area of various 2D and 3D shapes.\n* Use the formulas to calculate the volume of different solids.\n* Convert units between cm^3, mL, m^3, and L to ensure accuracy in calculations.",
+      "chatHistory": [
+        {
+          "question": "Provide a comprehensive, clear, and high-level explanation of the primary concepts in my uploaded notes for this subject.",
+          "answer": "📚 Based on Your Notes\n\nThe primary concepts covered in your uploaded notes are related to the formulas for calculating the area and volume of various geometric shapes. These include:\n\n1. The area of a trapezium, which is half the product of the sum of the lengths of the parallel sides and the perpendicular distance between them.\n2. The surface area of a solid, which is the sum of the areas of its faces.\n3. The surface area of specific solids, such as a cuboid, cube, and cylinder, which have unique formulas.\n4. The volume of a solid, which is the amount of region occupied by it.\n5. The volume of specific solids, such as a cuboid, cube, and cylinder, which have unique formulas.\n\nThese formulas are essential for calculating the area and volume of various shapes in mathematics and are used in various real-world applications.\n\n💡 Key Takeaway\n\nUnderstanding the formulas for area and volume of geometric shapes is crucial for solving problems in mathematics and real-world applications.",
+          "answerSource": "notes",
+          "sources": 2,
+          "timestamp": "09:36 am",
+          "loading": false
+        },
+        {
+          "question": "Summarize the key takeaways, chapters, and core definitions in my uploaded lecture notes.",
+          "answer": "📚 Based on Your Notes\n\nKey Takeaways:\n1. The area of a trapezium is calculated as half the sum of the lengths of parallel sides multiplied by the perpendicular distance between them.\n2. The surface area of a solid is the sum of the areas of its faces.\n3. The volume of a solid is the amount of region occupied by it.\n\nChapters:\n1. Area of a Trapezium\n2. Surface Area of a Solid\n3. Volume of a Solid\n\nCore Definitions:\n1. Surface Area: The sum of the areas of the faces of a solid.\n2. Volume: The amount of region occupied by a solid.\n\n💡 Key Takeaway\n\nThese are the key concepts covered in your uploaded lecture notes.",
+          "answerSource": "notes",
+          "sources": 2,
+          "timestamp": "09:37 am",
+          "loading": false
+        }
+      ],
+      "flashcards": [
+        {
+          "question": "What is the formula for the area of a trapezium?",
+          "answer": "Half of the sum of the lengths of parallel sides multiplied by the perpendicular distance between them.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the surface area of a cuboid?",
+          "answer": "2(lb + bh + hl), where l, b, and h are the length, breadth, and height of the cuboid.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the volume of a cube?",
+          "answer": "l^3, where l is the length of a side of the cube.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the surface area of a cylinder?",
+          "answer": "2πr(r + h), where r is the radius and h is the height of the cylinder.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the relationship between a cubic meter and a liter?",
+          "answer": "1 cubic meter is equal to 1000 liters.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the area of a rhombus?",
+          "answer": "Half the product of its diagonals.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the surface area of a solid?",
+          "answer": "The sum of the areas of its faces.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the volume of a cylinder?",
+          "answer": "πr^2h, where r is the radius and h is the height of the cylinder.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid?",
+          "answer": "lxbxh, where l, b, and h are the length, breadth, and height of the cuboid.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the relationship between a cubic meter and a milliliter?",
+          "answer": "1 cubic meter is equal to 1,000,000 milliliters.",
+          "difficulty": "medium"
+        }
+      ],
+      "quizzes": [
+        {
+          "question": "What is the formula for the area of a trapezium?",
+          "options": [
+            "A. Half of the sum of the lengths of parallel sides x 'perpendicular distance between them",
+            "B. Half of the product of the lengths of parallel sides x 'perpendicular distance between them",
+            "C. Sum of the lengths of parallel sides x 'perpendicular distance between them",
+            "D. Product of the lengths of parallel sides x 'perpendicular distance between them"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a rhombus?",
+          "options": [
+            "A. Half the product of its diagonals",
+            "B. Product of its diagonals",
+            "C. Sum of the lengths of its sides",
+            "D. Half the sum of the lengths of its sides"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a cuboid?",
+          "options": [
+            "A. 2(lb + bh + hl)",
+            "B. 2(l + b + h)",
+            "C. 2(lb + bh)",
+            "D. 2(l + h)"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a cube?",
+          "options": [
+            "A. 6(lb)",
+            "B. 6(l + b)",
+            "C. 6(lb)",
+            "D. 6(l + b + h)"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "What is the formula for the surface area of a cylinder?",
+          "options": [
+            "A. 2xr(r + h)",
+            "B. 2xr(r - h)",
+            "C. 2xr(r + h)",
+            "D. 2xr(r - h)"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid?",
+          "options": [
+            "A. lxbxh",
+            "B. lxb + hxh",
+            "C. lxb - hxh",
+            "D. lxb + hxh + hxl"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cube?",
+          "options": [
+            "A. lxbxh",
+            "B. l^3",
+            "C. b^3",
+            "D. h^3"
+          ],
+          "answer": "B"
+        },
+        {
+          "question": "What is the formula for the volume of a cylinder?",
+          "options": [
+            "A. Trzh h",
+            "B. Trzh h",
+            "C. Trzh h",
+            "D. Trzh h"
+          ],
+          "answer": "B"
+        },
+        {
+          "question": "How many cubic centimeters are in one liter?",
+          "options": [
+            "A. 1000 cm^3",
+            "B. 100 cm^3",
+            "C. 10 cm^3",
+            "D. 1 cm^3"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "How many liters are in one cubic meter?",
+          "options": [
+            "A. 1000 L",
+            "B. 100 L",
+            "C. 10 L",
+            "D. 1 L"
+          ],
+          "answer": "A"
+        }
+      ],
+      "metadata": {}
+    }
+  },
+  "test_student": {
+    "DBMS": {
+      "id": "DBMS",
+      "name": "DBMS",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "Pasted Notes"
+      ],
+      "summary": "**Database Fundamentals**\n========================\n\n### Overview\n\n* Database management systems (DBMS) are software systems that manage and store data in a structured and organized way.\n* Key concepts: transactions, ACID properties, normalization.\n\n### Transactions\n---------------\n\n* A transaction is a sequence of operations performed on a database as a single, all-or-nothing unit of work.\n* Characteristics:\n\t+ Atomicity: ensures that either all or none of the operations are executed.\n\t+ Consistency: ensures that the database remains in a consistent state after the transaction is completed.\n\t+ Isolation: ensures that multiple transactions can be executed concurrently without interfering with each other.\n\t+ Durability: ensures that once a transaction is committed, its effects are permanent and cannot be rolled back.\n\n### ACID Properties\n-------------------\n\n* **Atomicity**:\n\t+ Ensures that a transaction is treated as a single, indivisible unit of work.\n\t+ If any part of the transaction fails, the entire transaction is rolled back.\n* **Consistency**:\n\t+ Ensures that the database remains in a consistent state after the transaction is completed.\n\t+ Prevents transactions from violating database constraints or rules.\n* **Isolation**:\n\t+ Ensures that multiple transactions can be executed concurrently without interfering with each other.\n\t+ Prevents transactions from seeing uncommitted changes made by other transactions.\n* **Durability**:\n\t+ Ensures that once a transaction is committed, its effects are permanent and cannot be rolled back.\n\t+ Ensures that the database remains in a consistent state even in the event of a failure.\n\n### Normalization\n----------------\n\n* Normalization is the process of organizing data in a database to minimize data redundancy and dependency.\n* Key concepts:\n\t+ **1NF (First Normal Form)**:\n\t\t- Each table cell contains a single value.\n\t\t- Each row in a table represents a unique entity.\n\t+ **2NF (Second Normal Form)**:\n\t\t- Each non-key attribute in a table depends on the entire primary key.\n\t\t- If a table is in 1NF, it is also in 2NF.\n\t+ **3NF (Third Normal Form)**:\n\t\t- If a table is in 2NF, and a non-key attribute depends on another non-key attribute, it should be moved to a separate table.\n\n### Key Takeaways\n-----------------\n\n* Transactions ensure that database operations are executed as a single, all-or-nothing unit of work.\n* ACID properties ensure that transactions are executed reliably and consistently.\n* Normalization minimizes data redundancy and dependency, improving data integrity and scalability.",
+      "chatHistory": [
+        {
+          "question": "What is Atomicity in DBMS transactions?",
+          "answer": "📚 Based on Your Notes Atomicity in DBMS transactions refers to the property that ensures either all or none of the actions in a transaction are executed. If any part of the transaction fails, the entire transaction is rolled back to its previous state, maintaining data consistency.\n\n💡 Key Takeaway Atomicity ensures that database operations are treated as a single, indivisible unit.",
+          "answerSource": "notes",
+          "sources": 1,
+          "timestamp": "08:33 am",
+          "loading": false
+        }
+      ],
+      "flashcards": [],
+      "quizzes": [],
+      "metadata": {}
+    }
+  },
+  "3b25ceb6-1b83-483f-bea1-254633eb4f5b": {
+    "AREA": {
+      "id": "AREA",
+      "name": "AREA",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "area.png"
+      ],
+      "summary": "**Mathematics Lecture Notes Summary**\n=====================================\n\n**Core Concepts**\n----------------\n\n* **Area and Surface Area**\n\t+ Area of a trapezium: half of the sum of the lengths of parallel sides x perpendicular distance between them\n\t+ Surface area of a solid: sum of the areas of its faces\n* **Volume of Solids**\n\t+ Volume of a cuboid: length x breadth x height (lxbxh)\n\t+ Volume of a cube: side^3\n\t+ Volume of a cylinder: πr^2h\n* **Conversion of Units**\n\t+ 1 cm^3 = 1 mL\n\t+ 1 m^3 = 1000000 cm^3 = 1000 L\n\n**Major Topics**\n----------------\n\n### 1. Area of a Trapezium\n\n* Formula: Area = (1/2) x (sum of parallel sides) x perpendicular distance\n* Example: Area of a trapezium with parallel sides 5 cm and 7 cm and perpendicular distance 3 cm is (1/2) x (5 + 7) x 3 = 24 cm^2\n\n### 2. Surface Area of Solids\n\n* Formula: Surface area = sum of areas of faces\n* Examples:\n\t+ Surface area of a cuboid: 2(lb + bh + hl)\n\t+ Surface area of a cube: 6s^2 (where s is the side length)\n\t+ Surface area of a cylinder: 2πr(r + h)\n\n### 3. Volume of Solids\n\n* Formula:\n\t+ Volume of a cuboid: lxbxh\n\t+ Volume of a cube: s^3\n\t+ Volume of a cylinder: πr^2h\n* Examples:\n\t+ Volume of a cuboid with length 5 cm, breadth 3 cm, and height 2 cm is 5 x 3 x 2 = 30 cm^3\n\t+ Volume of a cube with side length 4 cm is 4^3 = 64 cm^3\n\n### 4. Conversion of Units\n\n* 1 cm^3 = 1 mL\n* 1 m^3 = 1000000 cm^3 = 1000 L\n\n**Key Takeaways**\n-----------------\n\n* Understand the formulas for area and surface area of various solids\n* Apply the formulas to calculate the area and surface area of different shapes\n* Understand the formulas for volume of various solids\n* Apply the formulas to calculate the volume of different shapes\n* Convert between units of volume (cm^3, mL, L, m^3)",
+      "chatHistory": [],
+      "flashcards": [
+        {
+          "question": "What is the formula for the area of a trapezium?",
+          "answer": "The area of a trapezium is half of the sum of the lengths of parallel sides multiplied by the perpendicular distance between them.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the area of a rhombus?",
+          "answer": "The area of a rhombus is half the product of its diagonals.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the surface area of a cuboid?",
+          "answer": "The surface area of a cuboid is 2(lb + bh + hl).",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the surface area of a cube?",
+          "answer": "The surface area of a cube is 6l^2.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the surface area of a cylinder?",
+          "answer": "The surface area of a cylinder is 2πr(r + h).",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid?",
+          "answer": "The volume of a cuboid is lxbxh.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the volume of a cube?",
+          "answer": "The volume of a cube is l^3.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the volume of a cylinder?",
+          "answer": "The volume of a cylinder is πr^2h.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the conversion factor between cubic centimeters and milliliters?",
+          "answer": "1 cm^3 = 1 mL.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the conversion factor between cubic meters and liters?",
+          "answer": "1 m^3 = 1000 L.",
+          "difficulty": "medium"
+        }
+      ],
+      "quizzes": [
+        {
+          "question": "What is the formula for the area of a trapezium?",
+          "options": [
+            "A. half of the sum of the lengths of parallel sides x 'perpendicular distance between them",
+            "B. half of the product of its diagonals",
+            "C. sum of the areas of its faces",
+            "D. 2( lb + bh + hl)"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a rhombus?",
+          "options": [
+            "A. half the product of its diagonals",
+            "B. half of the sum of the lengths of parallel sides x 'perpendicular distance between them",
+            "C. 2( lb + bh + hl)",
+            "D. 6s"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a cuboid?",
+          "options": [
+            "A. 2( lb + bh + hl)",
+            "B. 6s",
+            "C. 2xr(r + h)",
+            "D. lxbxh"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid?",
+          "options": [
+            "A. lxbxh",
+            "B. 6s",
+            "C. 2xr(r + h)",
+            "D. half of the product of its diagonals"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cube?",
+          "options": [
+            "A. lxbxh",
+            "B. 6s",
+            "C. 2xr(r + h)",
+            "D. s^3"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the formula for the volume of a cylinder?",
+          "options": [
+            "A. lxbxh",
+            "B. 6s",
+            "C. 2xr(r + h)",
+            "D. πr^2h"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the conversion factor for 1 m^3 to liters?",
+          "options": [
+            "A. 1000 cm^3 = 1 mL",
+            "B. 1 m^3 = 1000000 L",
+            "C. 1 m^3 = 1000 L",
+            "D. 1 L = 1000 cm^3"
+          ],
+          "answer": "B"
+        },
+        {
+          "question": "What is the formula for the surface area of a cylinder?",
+          "options": [
+            "A. 2( lb + bh + hl)",
+            "B. 6s",
+            "C. 2xr(r + h)",
+            "D. 2πr(r + h)"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid in terms of cubic centimeters?",
+          "options": [
+            "A. lxbxh",
+            "B. 6s",
+            "C. 2xr(r + h)",
+            "D. 1000 cm^3 = 1 L"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the conversion factor for 1 mL to cubic centimeters?",
+          "options": [
+            "A. 1000 cm^3 = 1 mL",
+            "B. 1 mL = 1000 cm^3",
+            "C. 1 m^3 = 1000000 L",
+            "D. 1 L = 1000 cm^3"
+          ],
+          "answer": "B"
+        }
+      ],
+      "metadata": {}
+    }
+  }
+}

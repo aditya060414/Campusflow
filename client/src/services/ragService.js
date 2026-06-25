@@ -6,11 +6,7 @@ import api from "./api";
  */
 const ragService = {
   /**
-   * Upload and ingest notes into the RAG system.
-   * @param {string} student_id - Unique student ID.
-   * @param {string} subject - Subject name.
-   * @param {string} notes - Full text of the lecture notes.
-   * @returns {Promise<Object>} Status and number of chunks stored.
+   * Upload and ingest notes into the RAG system (Paste Text).
    */
   uploadNotes: async (student_id, subject, notes) => {
     const response = await api.post("/rag/ingest", {
@@ -22,55 +18,136 @@ const ragService = {
   },
 
   /**
-   * Ask a question based on the student's ingested notes.
-   * @param {string} student_id - Unique student ID.
-   * @param {string} question - Question text.
-   * @returns {Promise<Object>} The generated answer and source chunks used.
+   * Upload a note file (PDF, TXT, Image) for multi-format knowledge ingestion.
    */
-  askQuestion: async (student_id, question) => {
-    const response = await api.post("/rag/ask", {
-      student_id,
-      question,
-    });
-    return response.data;
-  },
+  uploadNote: async (student_id, subject, file) => {
+    const formData = new FormData();
+    formData.append("student_id", student_id);
+    formData.append("subject", subject);
+    formData.append("file", file);
 
-  /**
-   * Generate exactly 10 flashcards from the notes of a specific subject.
-   * @param {string} student_id - Unique student ID.
-   * @param {string} subject - Subject name.
-   * @returns {Promise<Array>} Array of 10 flashcard items.
-   */
-  generateFlashcards: async (student_id, subject) => {
-    const response = await api.post("/rag/flashcards", {
-      student_id,
-      subject,
-    });
-    return response.data;
-  },
-
-  /**
-   * Generate exactly 10 MCQs from the notes of a specific subject.
-   * @param {string} student_id - Unique student ID.
-   * @param {string} subject - Subject name.
-   * @returns {Promise<Array>} Array of 10 quiz items.
-   */
-  generateQuiz: async (student_id, subject) => {
-    const response = await api.post("/rag/quiz", {
-      student_id,
-      subject,
+    const response = await api.post("/rag/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response.data;
   },
 
   /**
    * Analyze an academic notice and extract a structured summary, deadlines, tasks, and priority.
-   * @param {string} notice_text - The raw text of the notice.
-   * @returns {Promise<Object>} Structured notice analysis response.
    */
   analyzeNotice: async (notice_text) => {
     const response = await api.post("/rag/notice/analyze", {
       notice_text,
+    });
+    return response.data;
+  },
+
+  // =====================================================================
+  // NEW MULTI-SUBJECT SYNCHRONIZED ENDPOINTS
+  // =====================================================================
+
+  /**
+   * Get all subjects for a student.
+   */
+  getSubjects: async (student_id) => {
+    const response = await api.get("/rag/subjects", {
+      params: { student_id }
+    });
+    return response.data;
+  },
+
+  /**
+   * Get summary for a specific subject.
+   */
+  getSubjectSummary: async (student_id, subjectId) => {
+    const response = await api.get(`/rag/subjects/${subjectId}/summary`, {
+      params: { student_id }
+    });
+    return response.data;
+  },
+
+  /**
+   * Get chat history for a specific subject.
+   */
+  getSubjectChat: async (student_id, subjectId) => {
+    const response = await api.get(`/rag/subjects/${subjectId}/chat`, {
+      params: { student_id }
+    });
+    return response.data;
+  },
+
+  /**
+   * Get flashcards for a specific subject.
+   */
+  getSubjectFlashcards: async (student_id, subjectId) => {
+    const response = await api.get(`/rag/subjects/${subjectId}/flashcards`, {
+      params: { student_id }
+    });
+    return response.data;
+  },
+
+  /**
+   * Get quizzes for a specific subject.
+   */
+  getSubjectQuizzes: async (student_id, subjectId) => {
+    const response = await api.get(`/rag/subjects/${subjectId}/quizzes`, {
+      params: { student_id }
+    });
+    return response.data;
+  },
+
+  /**
+   * Send a message to a subject-specific chat.
+   */
+  sendChatMessage: async (student_id, subjectId, question) => {
+    const response = await api.post("/rag/chat", {
+      student_id,
+      subjectId,
+      question
+    });
+    return response.data;
+  },
+
+  /**
+   * Generate and cache subject summary.
+   */
+  generateSummary: async (student_id, subjectId) => {
+    const response = await api.post("/rag/generate-summary", {
+      student_id,
+      subjectId
+    });
+    return response.data;
+  },
+
+  /**
+   * Generate and cache subject flashcards.
+   */
+  generateFlashcards: async (student_id, subjectId) => {
+    const response = await api.post("/rag/generate-flashcards", {
+      student_id,
+      subjectId
+    });
+    return response.data;
+  },
+
+  /**
+   * Generate and cache subject quiz.
+   */
+  generateQuiz: async (student_id, subjectId) => {
+    const response = await api.post("/rag/generate-quiz", {
+      student_id,
+      subjectId
+    });
+    return response.data;
+  },
+
+  // Legacy compatibility bindings
+  askQuestion: async (student_id, question) => {
+    const response = await api.post("/rag/ask", {
+      student_id,
+      question,
     });
     return response.data;
   },

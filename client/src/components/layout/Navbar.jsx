@@ -4,66 +4,69 @@ import { useAuth } from "../../hooks/useAuth";
 import ThemeToggle from "../common/ThemeToggle";
 
 /**
- * Sticky, responsive navbar containing page actions,
- * user status, theme toggle, and mobile menu trigger.
+ * Top Navbar component.
+ * Fixed height of 72px with a solid bg-panel background and thin border.
+ * Aligns perfectly with the sidebar and matches the viewport layout grid.
  */
 export const Navbar = ({ onMobileMenuToggle }) => {
   const { student, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-gray-200 dark:border-slate-800 bg-white/85 dark:bg-slate-950/85 backdrop-blur-md transition-colors duration-300">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+    <header className="h-[72px] w-full border-b border-border bg-panel shrink-0 box-border transition-colors duration-150 relative z-40">
+      <div className="flex h-full items-center justify-between px-6">
         
-        {/* Left: Mobile Sidebar Trigger & Brand Title */}
-        <div className="flex items-center gap-4">
+        {/* Left: Mobile Sidebar Trigger & Workspace Indicator */}
+        <div className="flex items-center gap-3">
           <button
             onClick={onMobileMenuToggle}
             type="button"
-            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-300 lg:hidden focus:outline-none"
+            className="rounded p-1.5 text-muted hover:bg-panel2 hover:text-txt lg:hidden focus:outline-none border border-border"
             aria-label="Open sidebar"
           >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-4.5 w-4.5 stroke-[1.75]" />
           </button>
           
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight text-primary dark:text-primary-400">
-              Campus<span className="text-gray-900 dark:text-white">Flow</span>
+          <div className="flex items-center gap-2.5">
+            {/* Desktop Active Workspace Tag */}
+            <span className="hidden lg:inline-block px-2.5 py-0.5 text-[10px] font-bold rounded bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider font-display">
+              AI Command Center
             </span>
-            <span className="hidden sm:inline-block px-2 py-0.5 text-xs font-semibold rounded bg-sky-100 text-sky-800 dark:bg-sky-950/40 dark:text-sky-400">
-              AI Study Buddy
+            {/* Mobile Brand Name */}
+            <span className="lg:hidden text-[16px] font-bold text-txt font-display uppercase tracking-wider">
+              Campus<span className="text-primary">Flow</span>
             </span>
           </div>
         </div>
 
-        {/* Right: Theme Toggle, User Indicator, and Logout */}
+        {/* Right: Theme Toggle, User Profile, and Logout */}
         <div className="flex items-center gap-4">
           <ThemeToggle />
 
-          {/* User Profile Card */}
+          {/* User Profile Info Card */}
           {student && (
-            <div className="flex items-center gap-3 pl-3 border-l border-gray-200 dark:border-slate-800">
+            <div className="flex items-center gap-3 pl-4 border-l border-border">
               <div className="hidden md:flex flex-col text-right">
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-[13px] font-semibold text-txt font-display">
                   {student.name}
                 </span>
-                <span className="text-xs text-gray-500 dark:text-slate-400">
-                  ID: {student.student_id}
+                <span className="text-[9px] text-muted uppercase tracking-widest font-bold">
+                  Student
                 </span>
               </div>
               
-              {/* User Icon Avatar */}
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-primary-900/30 dark:text-primary-400">
-                <User className="h-5 w-5" />
+              {/* User Avatar Icon Box */}
+              <div className="flex h-8 w-8 items-center justify-center rounded-[4px] bg-primary/10 text-primary border border-primary/20 shrink-0">
+                <User className="h-4.5 w-4.5 stroke-[1.75]" />
               </div>
 
-              {/* Logout Button */}
+              {/* Logout Trigger */}
               <button
                 onClick={logout}
                 type="button"
-                className="rounded-lg p-2 text-gray-500 hover:bg-red-50 hover:text-red-600 dark:text-slate-400 dark:hover:bg-red-950/30 dark:hover:text-red-400 transition-colors duration-200 focus:outline-none"
+                className="rounded p-1.5 text-muted hover:bg-danger/10 hover:text-danger border border-transparent hover:border-danger/10 transition-colors duration-150 focus:outline-none"
                 title="Log out"
               >
-                <LogOut className="h-5 w-5" />
+                <LogOut className="h-4.5 w-4.5 stroke-[1.75]" />
               </button>
             </div>
           )}
