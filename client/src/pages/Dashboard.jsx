@@ -336,15 +336,18 @@ export const Dashboard = () => {
           <ArrowRight className="w-4 h-4 text-muted group-hover:text-txt group-hover:translate-x-0.5 transition-all duration-150" />
         </div>
 
-        {/* Attendance (Disabled) */}
-        <div className="bg-panel flex items-center justify-between gap-3 px-5 py-4.5 text-muted/35 cursor-not-allowed select-none">
+        {/* Attendance */}
+        <div 
+          onClick={() => navigate("/dashboard/attendance")} 
+          className="bg-panel flex items-center justify-between gap-3 px-5 py-4.5 hover:bg-panel2 cursor-pointer group transition-colors duration-150"
+        >
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center bg-border text-muted/30 rounded-[4px] flex-shrink-0 bg-transparent border border-border">
+            <div className="w-8 h-8 flex items-center justify-center bg-primary/10 text-primary rounded-[4px] border border-primary/20 flex-shrink-0">
               <CheckSquare className="w-4.5 h-4.5 stroke-[1.75]" />
             </div>
-            <span className="text-[14px] font-medium font-body">Attendance</span>
+            <span className="text-[14px] font-medium text-txt font-body">Attendance</span>
           </div>
-          <span className="text-[9px] font-bold bg-panel2 px-1.5 py-0.5 rounded-[3px] text-muted/40 border border-border/50 uppercase tracking-wider">Soon</span>
+          <ArrowRight className="w-4 h-4 text-muted group-hover:text-txt group-hover:translate-x-0.5 transition-all duration-150" />
         </div>
 
         {/* Settings (Disabled) */}

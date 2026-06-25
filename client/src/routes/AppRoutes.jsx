@@ -8,6 +8,8 @@ import StudyBuddy from "../pages/StudyBuddy";
 import NoticeAnalyzer from "../pages/NoticeAnalyzer";
 import StudyBuddyFullscreen from "../pages/StudyBuddyFullscreen";
 import DeadlineManager from "../pages/DeadlineManager";
+import Attendance from "../pages/Attendance";
+import DSAVisualizer from "../pages/DSAVisualizer";
 import { StudyBuddyProvider } from "../context/StudyBuddyContext";
 import { useAuth } from "../hooks/useAuth";
 
@@ -59,6 +61,12 @@ export const AppRoutes = () => {
           
           {/* /dashboard/deadlines */}
           <Route path="deadlines" element={<DeadlineManager />} />
+
+          {/* /dashboard/attendance */}
+          <Route path="attendance" element={<Attendance />} />
+
+          {/* /dashboard/dsa */}
+          <Route path="dsa" element={<DSAVisualizer />} />
         </Route>
 
         {/* Wildcard Fallback redirection */}
