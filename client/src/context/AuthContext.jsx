@@ -33,8 +33,13 @@ const loadStoredStudent = () => {
   return null;
 };
 
+const defaultStudent = {
+  student_id: "guest_student",
+  name: "Guest Student"
+};
+
 export const AuthProvider = ({ children }) => {
-  const [student, setStudent] = useState(loadStoredStudent);
+  const [student, setStudent] = useState(loadStoredStudent || defaultStudent);
 
   const login = (studentData, tokens = {}) => {
     const normalizedStudent = normalizeStudent(studentData);
@@ -59,10 +64,10 @@ export const AuthProvider = ({ children }) => {
     }
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    setStudent(null);
+    setStudent(defaultStudent);
   };
 
-  const isAuthenticated = !!(student && student.student_id);
+  const isAuthenticated = true;
 
   return (
     <AuthContext.Provider value={{ student, login, logout, isAuthenticated }}>

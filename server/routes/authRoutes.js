@@ -16,18 +16,18 @@ const getDeviceString = (userAgent) => {
   if (!userAgent) return "Unknown Device";
   let os = "Unknown OS";
   let browser = "Unknown Browser";
-  
+
   if (userAgent.includes("Windows")) os = "Windows";
   else if (userAgent.includes("Macintosh") || userAgent.includes("Mac OS")) os = "macOS";
   else if (userAgent.includes("Linux")) os = "Linux";
   else if (userAgent.includes("Android")) os = "Android";
   else if (userAgent.includes("iPhone") || userAgent.includes("iPad")) os = "iOS";
-  
+
   if (userAgent.includes("Chrome")) browser = "Chrome";
   else if (userAgent.includes("Firefox")) browser = "Firefox";
   else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Safari";
   else if (userAgent.includes("Edge") || userAgent.includes("Edg")) browser = "Edge";
-  
+
   return `${browser} ${os}`;
 };
 
@@ -129,7 +129,7 @@ const generateToken = (payload, expiresIn, type = "access") => {
 // OTP dispatcher (supports n8n webhook and direct Twilio WhatsApp API)
 const dispatchOtp = async (phone, email, otp) => {
   console.log(`[OTP DISPATCH] Generated OTP ${otp} for ${email} (${phone})`);
-  
+
   let n8nSuccess = false;
   let twilioSuccess = false;
 
@@ -178,7 +178,7 @@ const requireAuth = async (req, res, next) => {
   const token = authHeader.split(" ")[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    
+
     // Validate token type
     if (decoded.type !== "access") {
       return res.status(401).json({ success: false, message: "Invalid token type. Access token required." });
@@ -207,7 +207,7 @@ const requireAuth = async (req, res, next) => {
 router.post("/check-email", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ success: false, message: "Email is required." });
-  
+
   const lowerEmail = email.toLowerCase().trim();
   const exists = await User.exists({ email: lowerEmail });
   return res.json({ success: true, taken: !!exists });
@@ -217,7 +217,7 @@ router.post("/check-email", async (req, res) => {
 router.post("/check-phone", async (req, res) => {
   const { phone } = req.body;
   if (!phone) return res.status(400).json({ success: false, message: "Phone number is required." });
-  
+
   const stripped = phone.replace(/\D/g, "");
   const exists = await User.exists({ phone: stripped });
   return res.json({ success: true, taken: !!exists });
@@ -227,7 +227,7 @@ router.post("/check-phone", async (req, res) => {
 router.post("/check-username", async (req, res) => {
   const { username } = req.body;
   if (!username) return res.status(400).json({ success: false, message: "Username is required." });
-  
+
   const lowerUsername = username.toLowerCase().trim();
   const exists = await User.exists({ username: lowerUsername });
   return res.json({ success: true, taken: !!exists });
@@ -239,33 +239,46 @@ router.post("/signup", authLimiter, async (req, res) => {
   const { email, phone, username, password } = req.body;
 
   // 1. Validate parameters
-  if (!email || !phone || !username || !password) {
-    return res.status(400).json({ success: false, message: "All fields are required." });
+  if (!username || !password) {
+    return res.status(400).json({ success: false, message: "Username and password are required." });
   }
 
-  // Gmail-only restriction
-  const gmailRegex = /^[^@]+@gmail\.com$/;
-  if (!gmailRegex.test(email.toLowerCase())) {
-    return res.status(400).json({ success: false, message: "Only @gmail.com addresses are permitted." });
+  if (email && typeof email === 'string') {
+    const normalizedEmail = email.toLowerCase().trim();
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if (!emailRegex.test(normalizedEmail)) {
+      return res.status(400).json({ success: false, message: "Enter a valid email address." });
+    }
   }
 
-  // Password length check
+  if (phone && typeof phone === 'string') {
+    const strippedPhone = phone.replace(/\D/g, "");
+    if (strippedPhone.length < 10) {
+      return res.status(400).json({ success: false, message: "Enter a valid phone number." });
+    }
+  }
+
   if (password.length < 8) {
     return res.status(400).json({ success: false, message: "Password must be at least 8 characters." });
   }
 
-  const lowerEmail = email.toLowerCase().trim();
+  const lowerEmail = email ? email.toLowerCase().trim() : null;
   const lowerUsername = username.toLowerCase().trim();
-  const strippedPhone = phone.replace(/\D/g, "");
+  const strippedPhone = phone ? phone.replace(/\D/g, "") : null;
 
   // 2. Check uniqueness
-  const emailExists = await User.exists({ email: lowerEmail });
   const usernameExists = await User.exists({ username: lowerUsername });
-  const phoneExists = await User.exists({ phone: strippedPhone });
-
-  if (emailExists) return res.status(400).json({ success: false, message: "Gmail address is already taken." });
   if (usernameExists) return res.status(400).json({ success: false, message: "Username is already taken." });
-  if (phoneExists) return res.status(400).json({ success: false, message: "Phone number is already taken." });
+
+  if (lowerEmail) {
+    const emailExists = await User.exists({ email: lowerEmail });
+    if (emailExists) return res.status(400).json({ success: false, message: "Email address is already taken." });
+  }
+
+  if (strippedPhone) {
+    const phoneExists = await User.exists({ phone: strippedPhone });
+    if (phoneExists) return res.status(400).json({ success: false, message: "Phone number is already taken." });
+  }
 
   // 3. Hash password and save
   const salt = bcrypt.genSaltSync(10);
@@ -274,8 +287,8 @@ router.post("/signup", authLimiter, async (req, res) => {
 
   await User.create({
     id: userId,
-    email: lowerEmail,
-    phone: strippedPhone,
+    email: lowerEmail || undefined,
+    phone: strippedPhone || undefined,
     username: lowerUsername,
     passwordHash,
     createdAt: new Date()
@@ -408,7 +421,7 @@ router.post("/logout", requireAuth, async (req, res) => {
   try {
     const decodedAccess = jwt.verify(accessToken, JWT_SECRET);
     tokensToRevoke.push({ jti: decodedAccess.jti });
-  } catch (e) {}
+  } catch (e) { }
 
   if (refreshToken) {
     try {
@@ -416,13 +429,13 @@ router.post("/logout", requireAuth, async (req, res) => {
       if (decodedRefresh.type === "refresh") {
         tokensToRevoke.push({ jti: decodedRefresh.jti });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   if (tokensToRevoke.length > 0) {
     try {
       await TokenBlacklist.insertMany(tokensToRevoke, { ordered: false });
-    } catch (err) {}
+    } catch (err) { }
   }
 
   return res.json({ success: true, message: "Logged out successfully. Tokens revoked." });
@@ -449,7 +462,7 @@ router.delete("/profile", requireAuth, async (req, res) => {
   try {
     const decodedAccess = jwt.verify(accessToken, JWT_SECRET);
     await TokenBlacklist.create({ jti: decodedAccess.jti });
-  } catch (e) {}
+  } catch (e) { }
 
   // Delete user
   await User.deleteOne({ id: userId });
@@ -466,7 +479,7 @@ router.post("/forgot-password", otpLimiter, async (req, res) => {
   if (!email) return res.status(400).json({ success: false, message: "Gmail address is required." });
 
   const lowerEmail = email.toLowerCase().trim();
-  
+
   // Find user
   const user = await User.findOne({ email: lowerEmail });
 
@@ -601,7 +614,7 @@ router.post("/reset-password", otpLimiter, async (req, res) => {
     // Hash new password and update
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(newPassword, salt);
-    
+
     user.passwordHash = passwordHash;
     await user.save();
     console.log(`[AUTH reset-password] Reset password for user: ${user.username} (${user.email})`);

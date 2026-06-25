@@ -7,8 +7,7 @@ import AppRoutes from "./routes/AppRoutes";
 
 /**
  * Root application component.
- * Wraps the application with global Providers, routing context,
- * and mounts the global toast notification layout.
+ * Wraps the application with global providers and routing context.
  */
 function App() {
   return (

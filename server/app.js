@@ -3,7 +3,6 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const ragRoutes = require("./routes/ragRoutes");
 const deadlineRoutes = require("./routes/deadlineRoutes");
-const { router: authRoutes } = require("./routes/authRoutes");
 const { router: notificationRoutes } = require("./routes/notificationRoutes");
 const attendanceRoutes = require("./routes/attendanceRoutes");
 const dsaRoutes = require("./routes/dsaRoutes");
@@ -45,10 +44,6 @@ app.use("/api/rag", ragRoutes);
 
 // Mount Deadline planning routes
 app.use("/api/deadlines", deadlineRoutes);
-
-// Mount Authentication routes
-app.use("/api/auth", authRoutes);
-app.use("/auth", authRoutes);
 
 // Mount Notification routes
 app.use("/api/notifications", notificationRoutes);
