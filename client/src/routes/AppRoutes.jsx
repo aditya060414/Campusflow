@@ -2,7 +2,9 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import DashboardLayout from "../components/layout/DashboardLayout";
-import Login from "../pages/Login";
+import LoginPage from "../pages/auth/LoginPage";
+import SignupPage from "../pages/auth/SignupPage";
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage";
 import Dashboard from "../pages/Dashboard";
 import StudyBuddy from "../pages/StudyBuddy";
 import NoticeAnalyzer from "../pages/NoticeAnalyzer";
@@ -27,7 +29,9 @@ export const AppRoutes = () => {
     <StudyBuddyProvider>
       <Routes>
         {/* Public Guest Routes */}
-        <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+        <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
+        <Route path="/signup" element={<GuestRoute><SignupPage /></GuestRoute>} />
+        <Route path="/forgot-password" element={<GuestRoute><ForgotPasswordPage /></GuestRoute>} />
 
         {/* Standalone Fullscreen Study Workspace */}
         <Route

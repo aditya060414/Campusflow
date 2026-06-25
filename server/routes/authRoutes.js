@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const rateLimit = require("express-rate-limit");
 const axios = require("axios");
 const { sendNotification } = require("./notificationRoutes");
+const User = require("../models/User");
+const TokenBlacklist = require("../models/TokenBlacklist");
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "campusflow-super-secret-key-123";
@@ -29,33 +31,37 @@ const getDeviceString = (userAgent) => {
   return `${browser} ${os}`;
 };
 
-// =========================================================================
-// IN-MEMORY DATA STORES
-// (Swap with MongoDB / Redis in a production environment)
-// =========================================================================
-
-// Users Store: Map<userId, UserObject>
-const usersStore = new Map();
-
-// Blacklisted JTIs: Set<jti>
-const blacklistedJtis = new Set();
-
-// Pending OTPs: Map<email, { otp, expiresAt, phone }>
-const pendingOtps = new Map();
+const redis = require("redis");
+const redisClient = redis.createClient({
+  url: process.env.REDIS_URL || "redis://localhost:6379"
+});
+redisClient.on('error', err => console.error('Redis Client Error', err));
+redisClient.connect().catch(console.error);
 
 // Pre-populate with a default student for testing/demo convenience
-const defaultSalt = bcrypt.genSaltSync(10);
-const defaultHash = bcrypt.hashSync("password123", defaultSalt);
-usersStore.set("default-user-id", {
-  id: "default-user-id",
-  email: "student@gmail.com",
-  phone: "1234567890",
-  username: "student_123",
-  passwordHash: defaultHash,
-  createdAt: new Date()
-});
-
-console.log("[AUTH DB] Pre-populated default user: student_123 / password123");
+const setupDefaultUser = async () => {
+  try {
+    const defaultSalt = bcrypt.genSaltSync(10);
+    const defaultHash = bcrypt.hashSync("password123", defaultSalt);
+    await User.findOneAndUpdate(
+      { username: "student_123" },
+      {
+        $setOnInsert: {
+          id: "default-user-id",
+          email: "student@gmail.com",
+          phone: "1234567890",
+          username: "student_123",
+          passwordHash: defaultHash
+        }
+      },
+      { upsert: true, new: true }
+    );
+    console.log("[AUTH DB] Verified default user in DB: student_123 / password123");
+  } catch (err) {
+    console.error("[AUTH DB] Failed to setup default user:", err);
+  }
+};
+setupDefaultUser();
 
 // =========================================================================
 // RATE LIMITERS (via express-rate-limit)
@@ -163,7 +169,7 @@ const dispatchOtp = async (phone, email, otp) => {
 };
 
 // Auth middleware to secure private endpoints
-const requireAuth = (req, res, next) => {
+const requireAuth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ success: false, message: "Authorization token missing or invalid." });
@@ -179,7 +185,8 @@ const requireAuth = (req, res, next) => {
     }
 
     // Check if blacklisted
-    if (blacklistedJtis.has(decoded.jti)) {
+    const isBlacklisted = await TokenBlacklist.exists({ jti: decoded.jti });
+    if (isBlacklisted) {
       return res.status(401).json({ success: false, message: "Token has been revoked/logged out." });
     }
 
@@ -197,38 +204,38 @@ const requireAuth = (req, res, next) => {
 // --- LIVE AVAILABILITY CHECKS ---
 
 // Check if email is already registered
-router.post("/check-email", (req, res) => {
+router.post("/check-email", async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ success: false, message: "Email is required." });
   
   const lowerEmail = email.toLowerCase().trim();
-  const exists = Array.from(usersStore.values()).some((u) => u.email.toLowerCase() === lowerEmail);
-  return res.json({ success: true, taken: exists });
+  const exists = await User.exists({ email: lowerEmail });
+  return res.json({ success: true, taken: !!exists });
 });
 
 // Check if phone number is already registered
-router.post("/check-phone", (req, res) => {
+router.post("/check-phone", async (req, res) => {
   const { phone } = req.body;
   if (!phone) return res.status(400).json({ success: false, message: "Phone number is required." });
   
   const stripped = phone.replace(/\D/g, "");
-  const exists = Array.from(usersStore.values()).some((u) => u.phone.replace(/\D/g, "") === stripped);
-  return res.json({ success: true, taken: exists });
+  const exists = await User.exists({ phone: stripped });
+  return res.json({ success: true, taken: !!exists });
 });
 
 // Check if username is already registered (case-insensitive)
-router.post("/check-username", (req, res) => {
+router.post("/check-username", async (req, res) => {
   const { username } = req.body;
   if (!username) return res.status(400).json({ success: false, message: "Username is required." });
   
   const lowerUsername = username.toLowerCase().trim();
-  const exists = Array.from(usersStore.values()).some((u) => u.username.toLowerCase() === lowerUsername);
-  return res.json({ success: true, taken: exists });
+  const exists = await User.exists({ username: lowerUsername });
+  return res.json({ success: true, taken: !!exists });
 });
 
 // --- REGISTRATION & SIGNUP ---
 
-router.post("/signup", authLimiter, (req, res) => {
+router.post("/signup", authLimiter, async (req, res) => {
   const { email, phone, username, password } = req.body;
 
   // 1. Validate parameters
@@ -252,9 +259,9 @@ router.post("/signup", authLimiter, (req, res) => {
   const strippedPhone = phone.replace(/\D/g, "");
 
   // 2. Check uniqueness
-  const emailExists = Array.from(usersStore.values()).some((u) => u.email.toLowerCase() === lowerEmail);
-  const usernameExists = Array.from(usersStore.values()).some((u) => u.username.toLowerCase() === lowerUsername);
-  const phoneExists = Array.from(usersStore.values()).some((u) => u.phone.replace(/\D/g, "") === strippedPhone);
+  const emailExists = await User.exists({ email: lowerEmail });
+  const usernameExists = await User.exists({ username: lowerUsername });
+  const phoneExists = await User.exists({ phone: strippedPhone });
 
   if (emailExists) return res.status(400).json({ success: false, message: "Gmail address is already taken." });
   if (usernameExists) return res.status(400).json({ success: false, message: "Username is already taken." });
@@ -265,28 +272,27 @@ router.post("/signup", authLimiter, (req, res) => {
   const passwordHash = bcrypt.hashSync(password, salt);
   const userId = crypto.randomUUID();
 
-  const newUser = {
+  await User.create({
     id: userId,
     email: lowerEmail,
     phone: strippedPhone,
     username: lowerUsername,
     passwordHash,
     createdAt: new Date()
-  };
+  });
 
-  usersStore.set(userId, newUser);
   console.log(`[AUTH signup] Registered new user: ${lowerUsername} (${lowerEmail})`);
 
   // 4. Generate access and refresh tokens
   const { token: accessToken } = generateToken({ id: userId, username: lowerUsername }, "15m", "access");
   const { token: refreshToken } = generateToken({ id: userId, username: lowerUsername }, "7d", "refresh");
 
-  // Trigger automated n8n signup notification
-  sendNotification({
-    type: "signup",
-    name: username,
-    email: lowerEmail
-  });
+  // Trigger automated n8n signup notification (Disabled per user request)
+  // sendNotification({
+  //   type: "signup",
+  //   name: username,
+  //   email: lowerEmail
+  // });
 
   return res.status(201).json({
     success: true,
@@ -304,7 +310,7 @@ router.post("/signup", authLimiter, (req, res) => {
 
 // --- LOGIN ---
 
-router.post("/login", authLimiter, (req, res) => {
+router.post("/login", authLimiter, async (req, res) => {
   const { username, password } = req.body; // username can be username or email
 
   if (!username || !password) {
@@ -314,9 +320,9 @@ router.post("/login", authLimiter, (req, res) => {
   const query = username.toLowerCase().trim();
 
   // Find user by username or email
-  const user = Array.from(usersStore.values()).find(
-    (u) => u.username.toLowerCase() === query || u.email.toLowerCase() === query
-  );
+  const user = await User.findOne({
+    $or: [{ username: query }, { email: query }]
+  });
 
   // Generic credential error (never reveal which field was wrong)
   if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
@@ -327,14 +333,14 @@ router.post("/login", authLimiter, (req, res) => {
   const { token: accessToken } = generateToken({ id: user.id, username: user.username }, "15m", "access");
   const { token: refreshToken } = generateToken({ id: user.id, username: user.username }, "7d", "refresh");
 
-  // Trigger automated n8n login notification
-  sendNotification({
-    type: "login",
-    name: user.username,
-    email: user.email,
-    time: new Date().toISOString().slice(0, 16),
-    device: getDeviceString(req.headers["user-agent"])
-  });
+  // Trigger automated n8n login notification (Disabled per user request)
+  // sendNotification({
+  //   type: "login",
+  //   name: user.username,
+  //   email: user.email,
+  //   time: new Date().toISOString().slice(0, 16),
+  //   device: getDeviceString(req.headers["user-agent"])
+  // });
 
   return res.json({
     success: true,
@@ -352,7 +358,7 @@ router.post("/login", authLimiter, (req, res) => {
 
 // --- REFRESH TOKEN ---
 
-router.post("/refresh", (req, res) => {
+router.post("/refresh", async (req, res) => {
   const { refreshToken } = req.body;
 
   if (!refreshToken) {
@@ -366,12 +372,13 @@ router.post("/refresh", (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid token type. Refresh token required." });
     }
 
-    if (blacklistedJtis.has(decoded.jti)) {
+    const isBlacklisted = await TokenBlacklist.exists({ jti: decoded.jti });
+    if (isBlacklisted) {
       return res.status(401).json({ success: false, message: "Refresh token has been revoked." });
     }
 
     // Blacklist the old refresh token to prevent reuse (optional token rotation)
-    blacklistedJtis.add(decoded.jti);
+    await TokenBlacklist.create({ jti: decoded.jti });
 
     // Generate new access and refresh tokens
     const { token: newAccessToken } = generateToken({ id: decoded.id, username: decoded.username }, "15m", "access");
@@ -390,24 +397,32 @@ router.post("/refresh", (req, res) => {
 
 // --- LOGOUT ---
 
-router.post("/logout", requireAuth, (req, res) => {
+router.post("/logout", requireAuth, async (req, res) => {
   // Retrieve tokens from headers and body to blacklist both
   const authHeader = req.headers.authorization;
   const accessToken = authHeader.split(" ")[1];
   const { refreshToken } = req.body;
 
+  const tokensToRevoke = [];
+
   try {
     const decodedAccess = jwt.verify(accessToken, JWT_SECRET);
-    blacklistedJtis.add(decodedAccess.jti);
+    tokensToRevoke.push({ jti: decodedAccess.jti });
   } catch (e) {}
 
   if (refreshToken) {
     try {
       const decodedRefresh = jwt.verify(refreshToken, JWT_SECRET);
       if (decodedRefresh.type === "refresh") {
-        blacklistedJtis.add(decodedRefresh.jti);
+        tokensToRevoke.push({ jti: decodedRefresh.jti });
       }
     } catch (e) {}
+  }
+
+  if (tokensToRevoke.length > 0) {
+    try {
+      await TokenBlacklist.insertMany(tokensToRevoke, { ordered: false });
+    } catch (err) {}
   }
 
   return res.json({ success: true, message: "Logged out successfully. Tokens revoked." });
@@ -415,7 +430,7 @@ router.post("/logout", requireAuth, (req, res) => {
 
 // --- DELETE PROFILE ---
 
-router.delete("/profile", requireAuth, (req, res) => {
+router.delete("/profile", requireAuth, async (req, res) => {
   const { password } = req.body;
   const userId = req.user.id;
 
@@ -423,7 +438,7 @@ router.delete("/profile", requireAuth, (req, res) => {
     return res.status(400).json({ success: false, message: "Password confirmation is required." });
   }
 
-  const user = usersStore.get(userId);
+  const user = await User.findOne({ id: userId });
   if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
     return res.status(400).json({ success: false, message: "Password confirmation failed." });
   }
@@ -433,11 +448,11 @@ router.delete("/profile", requireAuth, (req, res) => {
   const accessToken = authHeader.split(" ")[1];
   try {
     const decodedAccess = jwt.verify(accessToken, JWT_SECRET);
-    blacklistedJtis.add(decodedAccess.jti);
+    await TokenBlacklist.create({ jti: decodedAccess.jti });
   } catch (e) {}
 
   // Delete user
-  usersStore.delete(userId);
+  await User.deleteOne({ id: userId });
   console.log(`[AUTH profile] Deleted user profile: ${user.username}`);
 
   return res.json({ success: true, message: "User profile deleted successfully." });
@@ -453,7 +468,7 @@ router.post("/forgot-password", otpLimiter, async (req, res) => {
   const lowerEmail = email.toLowerCase().trim();
   
   // Find user
-  const user = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === lowerEmail);
+  const user = await User.findOne({ email: lowerEmail });
 
   // Generic error (don't confirm existence to prevent enumeration)
   if (!user) {
@@ -464,8 +479,8 @@ router.post("/forgot-password", otpLimiter, async (req, res) => {
   const otp = crypto.randomInt(100000, 999999).toString();
   const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes from now
 
-  // Store OTP
-  pendingOtps.set(lowerEmail, { otp, expiresAt, phone: user.phone });
+  // Store OTP in Redis (600s TTL = 10 minutes)
+  await redisClient.setEx(`otp:${lowerEmail}`, 600, JSON.stringify({ otp, phone: user.phone }));
 
   // Dispatch OTP
   await dispatchOtp(user.phone, lowerEmail, otp);
@@ -499,17 +514,16 @@ router.post("/resend-otp", otpLimiter, async (req, res) => {
   if (!email) return res.status(400).json({ success: false, message: "Gmail address is required." });
 
   const lowerEmail = email.toLowerCase().trim();
-  const pending = pendingOtps.get(lowerEmail);
+  const pendingData = await redisClient.get(`otp:${lowerEmail}`);
 
-  if (!pending) {
+  if (!pendingData) {
     return res.status(400).json({ success: false, message: "No active OTP request found for this email." });
   }
+  const pending = JSON.parse(pendingData);
 
   // Regenerate OTP
   const otp = crypto.randomInt(100000, 999999).toString();
-  const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
-  
-  pendingOtps.set(lowerEmail, { otp, expiresAt, phone: pending.phone });
+  await redisClient.setEx(`otp:${lowerEmail}`, 600, JSON.stringify({ otp, phone: pending.phone }));
 
   await dispatchOtp(pending.phone, lowerEmail, otp);
 
@@ -524,7 +538,7 @@ router.post("/resend-otp", otpLimiter, async (req, res) => {
 });
 
 // Step 2: Verify OTP
-router.post("/verify-otp", otpLimiter, (req, res) => {
+router.post("/verify-otp", otpLimiter, async (req, res) => {
   const { email, otp } = req.body;
 
   if (!email || !otp) {
@@ -532,23 +546,19 @@ router.post("/verify-otp", otpLimiter, (req, res) => {
   }
 
   const lowerEmail = email.toLowerCase().trim();
-  const pending = pendingOtps.get(lowerEmail);
+  const pendingData = await redisClient.get(`otp:${lowerEmail}`);
 
-  if (!pending) {
+  if (!pendingData) {
     return res.status(400).json({ success: false, message: "Invalid or expired OTP." });
   }
-
-  if (Date.now() > pending.expiresAt) {
-    pendingOtps.delete(lowerEmail);
-    return res.status(400).json({ success: false, message: "OTP has expired." });
-  }
+  const pending = JSON.parse(pendingData);
 
   if (pending.otp !== otp.trim()) {
     return res.status(400).json({ success: false, message: "Invalid OTP." });
   }
 
   // Success: Clear OTP and issue a short-lived password reset token (10 min, type reset)
-  pendingOtps.delete(lowerEmail);
+  await redisClient.del(`otp:${lowerEmail}`);
   const { token: resetToken } = generateToken({ email: lowerEmail }, "10m", "reset");
 
   return res.json({
@@ -559,7 +569,7 @@ router.post("/verify-otp", otpLimiter, (req, res) => {
 });
 
 // Step 3: Reset Password
-router.post("/reset-password", otpLimiter, (req, res) => {
+router.post("/reset-password", otpLimiter, async (req, res) => {
   const { resetToken, newPassword } = req.body;
 
   if (!resetToken || !newPassword) {
@@ -577,12 +587,13 @@ router.post("/reset-password", otpLimiter, (req, res) => {
       return res.status(400).json({ success: false, message: "Invalid token type. Reset token required." });
     }
 
-    if (blacklistedJtis.has(decoded.jti)) {
+    const isBlacklisted = await TokenBlacklist.exists({ jti: decoded.jti });
+    if (isBlacklisted) {
       return res.status(401).json({ success: false, message: "Reset token has already been used/revoked." });
     }
 
     // Find user
-    const user = Array.from(usersStore.values()).find((u) => u.email.toLowerCase() === decoded.email.toLowerCase());
+    const user = await User.findOne({ email: decoded.email.toLowerCase() });
     if (!user) {
       return res.status(400).json({ success: false, message: "User not found." });
     }
@@ -592,10 +603,11 @@ router.post("/reset-password", otpLimiter, (req, res) => {
     const passwordHash = bcrypt.hashSync(newPassword, salt);
     
     user.passwordHash = passwordHash;
+    await user.save();
     console.log(`[AUTH reset-password] Reset password for user: ${user.username} (${user.email})`);
 
     // Blacklist the reset token to prevent double-use
-    blacklistedJtis.add(decoded.jti);
+    await TokenBlacklist.create({ jti: decoded.jti });
 
     // Trigger automated n8n password_reset notification
     sendNotification({

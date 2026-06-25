@@ -4,26 +4,25 @@
 
 /* Custom Theme Variables for Toaster & Brutalist Colors */
 :root {
+  --bg: #0B0D10;
+  --panel: #111318;
+  --border: #2B2F36;
+  --primary: #2563EB;
+  --muted: #9CA3AF;
+  --text: #F5F5F5;
   --toast-bg: #ffffff;
-  --toast-color: #111827; /* Gray 900 */
-  --bg: #fafafa;
-  --panel: #ffffff;
-  --panel2: #f4f4f5;
-  --txt: #09090b;
-  --muted: #71717a;
-  --border: #e4e4e7;
+  --toast-color: #111827;
 }
 
 .dark {
-  --toast-bg: #090d16; /* Slate 950 shadow background */
-  --toast-color: #f8fafc; /* Slate 50 */
-  --bg: #09090b;
-  --panel: #18181b;
-  --panel2: #27272a;
-  --txt: #fafafa;
-  --muted: #a1a1aa;
-  --border: #27272a;
+  --bg: #0B0D10; /* same dark bg */
+  --panel: #111318;
+  --border: #2B2F36;
+  --primary: #2563EB;
+  --muted: #9CA3AF;
+  --text: #F5F5F5;
 }
+
 
 /* Custom transitions and animations */
 @layer utilities {

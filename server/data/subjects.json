@@ -390,5 +390,173 @@
       ],
       "metadata": {}
     }
+  },
+  "default-user-id": {
+    "AREA": {
+      "id": "AREA",
+      "name": "AREA",
+      "uploadStatus": "completed",
+      "vectorizationStatus": "ready",
+      "uploadedFiles": [
+        "area.png"
+      ],
+      "summary": "**Mathematics Lecture Notes Summary**\n=====================================\n\n**Core Concepts**\n---------------\n\n* **Area and Surface Area**\n\t+ Area of a trapezium: half of the sum of the lengths of parallel sides x perpendicular distance between them\n\t+ Surface area of a solid: sum of the areas of its faces\n* **Volume**\n\t+ Amount of region occupied by a solid: its volume\n\t+ Volume of a solid: calculated using different formulas depending on the shape\n\n**Major Topics**\n----------------\n\n### 1. Area of a Trapezium and Rhombus\n\n* Area of a trapezium: `A = (1/2) × (sum of parallel sides) × perpendicular distance`\n* Area of a rhombus: `A = (1/2) × product of diagonals`\n\n### 2. Surface Area of Solids\n\n* Surface area of a cuboid: `SA = 2 × (lb + bh + hl)`\n* Surface area of a cube: `SA = 6 × side^2`\n* Surface area of a cylinder: `SA = 2 × π × r × (r + h)`\n\n### 3. Volume of Solids\n\n* Volume of a cuboid: `V = l × b × h`\n* Volume of a cube: `V = side^3`\n* Volume of a cylinder: `V = π × r^2 × h`\n\n**Key Takeaways**\n----------------\n\n* Understand the formulas for calculating the area and surface area of different solids\n* Learn the formulas for calculating the volume of different solids\n* Practice applying these formulas to solve problems\n\n**Conversion Factors**\n----------------------\n\n* 1 cm^3 = 1 mL\n* 1 m^3 = 1000000 cm^3 = 1000 L",
+      "chatHistory": [],
+      "flashcards": [
+        {
+          "question": "What is the formula for the area of a trapezium?",
+          "answer": "The area of a trapezium is half of the sum of the lengths of parallel sides multiplied by the perpendicular distance between them.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the surface area of a cuboid?",
+          "answer": "The surface area of a cuboid is 2(lb + bh + hl), where l, b, and h are the length, breadth, and height of the cuboid.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid?",
+          "answer": "The volume of a cuboid is lxbxh, where l, b, and h are the length, breadth, and height of the cuboid.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the surface area of a cube?",
+          "answer": "The surface area of a cube is 6a^2, where a is the side length of the cube.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the formula for the volume of a cube?",
+          "answer": "The volume of a cube is a^3, where a is the side length of the cube.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the formula for the surface area of a cylinder?",
+          "answer": "The surface area of a cylinder is 2πr(r + h), where r is the radius and h is the height of the cylinder.",
+          "difficulty": "hard"
+        },
+        {
+          "question": "What is the formula for the volume of a cylinder?",
+          "answer": "The volume of a cylinder is πr^2h, where r is the radius and h is the height of the cylinder.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the relationship between a milliliter (mL) and a cubic centimeter (cm^3)?",
+          "answer": "1 mL is equal to 1 cm^3.",
+          "difficulty": "easy"
+        },
+        {
+          "question": "What is the relationship between a cubic meter (m^3) and a liter (L)?",
+          "answer": "1 m^3 is equal to 1000 L.",
+          "difficulty": "medium"
+        },
+        {
+          "question": "What is the relationship between a cubic meter (m^3) and a cubic centimeter (cm^3)?",
+          "answer": "1 m^3 is equal to 1,000,000 cm^3.",
+          "difficulty": "hard"
+        }
+      ],
+      "quizzes": [
+        {
+          "question": "What is the formula for the area of a trapezium?",
+          "options": [
+            "A. Half of the sum of the lengths of parallel sides x perpendicular distance between them",
+            "B. Half of the product of the lengths of parallel sides x perpendicular distance between them",
+            "C. Sum of the lengths of parallel sides x perpendicular distance between them",
+            "D. Product of the lengths of parallel sides x perpendicular distance between them"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a cuboid?",
+          "options": [
+            "A. 2(lb + bh + hl)",
+            "B. 2(l + b + h)",
+            "C. 2(lb + bh + hl) + 2lh + 2bh",
+            "D. lb + bh + hl"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cube?",
+          "options": [
+            "A. lxbxh",
+            "B. lbh",
+            "C. lxb",
+            "D. l^3"
+          ],
+          "answer": "D"
+        },
+        {
+          "question": "What is the conversion factor between cubic centimeters and milliliters?",
+          "options": [
+            "A. 1 cm^3 = 1 mL",
+            "B. 1 cm^3 = 10 mL",
+            "C. 1 cm^3 = 1000 mL",
+            "D. 1 cm^3 = 100 mL"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "What is the formula for the surface area of a cylinder?",
+          "options": [
+            "A. 2xr(r + h)",
+            "B. 2xr^2 + 2xrh",
+            "C. 2xr^2 + 2xh^2",
+            "D. 2xr + 2xh"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cylinder?",
+          "options": [
+            "A. πr^2h",
+            "B. πr^2 + πrh",
+            "C. πr^2h",
+            "D. πrh"
+          ],
+          "answer": "C"
+        },
+        {
+          "question": "What is the formula for the surface area of a rhombus?",
+          "options": [
+            "A. Half the product of its diagonals",
+            "B. Half the sum of its diagonals",
+            "C. Product of its diagonals",
+            "D. Sum of its diagonals"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the volume of a cuboid?",
+          "options": [
+            "A. lxbxh",
+            "B. lbh",
+            "C. lxb",
+            "D. lwh"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the conversion factor between cubic meters and liters?",
+          "options": [
+            "A. 1 m^3 = 1000 L",
+            "B. 1 m^3 = 100 L",
+            "C. 1 m^3 = 10 L",
+            "D. 1 m^3 = 1 L"
+          ],
+          "answer": "A"
+        },
+        {
+          "question": "What is the formula for the surface area of a cube?",
+          "options": [
+            "A. 6l^2",
+            "B. 6l",
+            "C. 6l^2 + 12l",
+            "D. 6l^2 + 6l"
+          ],
+          "answer": "A"
+        }
+      ],
+      "metadata": {}
+    }
   }
 }
