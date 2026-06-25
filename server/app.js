@@ -5,6 +5,8 @@ const ragRoutes = require("./routes/ragRoutes");
 const deadlineRoutes = require("./routes/deadlineRoutes");
 const { router: authRoutes } = require("./routes/authRoutes");
 const { router: notificationRoutes } = require("./routes/notificationRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
+const dsaRoutes = require("./routes/dsaRoutes");
 
 const app = express();
 
@@ -50,6 +52,12 @@ app.use("/auth", authRoutes);
 
 // Mount Notification routes
 app.use("/api/notifications", notificationRoutes);
+
+// Mount Attendance routes
+app.use("/api/attendance", attendanceRoutes);
+
+// Mount DSA routes
+app.use("/api/dsa", dsaRoutes);
 
 // Global Error Handling Middleware (returns required success: false schema)
 app.use((err, req, res, next) => {

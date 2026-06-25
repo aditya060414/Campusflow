@@ -1,0 +1,86 @@
+{
+  "Bubble": {
+    "description": "Bubble Sort is a simple sorting algorithm that repeatedly steps through the input list element by element, comparing the current element with the one after it, swapping their values if needed.",
+    "pseudoCode": "for i from 0 to N-1:\n  for j from 0 to N-i-1:\n    if a[j] > a[j+1]:\n      swap(a[j], a[j+1])",
+    "spaceComplexity": "O(1)",
+    "bestTime": "O(n)",
+    "worstTime": "O(n²)"
+  },
+  "Selection": {
+    "description": "Selection Sort divides the input list into two parts: a sorted sublist of items which is built up from left to right at the front (left) of the list and a sublist of the remaining unsorted items.",
+    "pseudoCode": "for i from 0 to N-1:\n  minIndex = i\n  for j from i+1 to N:\n    if a[j] < a[minIndex]:\n      minIndex = j\n  swap(a[i], a[minIndex])",
+    "spaceComplexity": "O(1)",
+    "bestTime": "O(n²)",
+    "worstTime": "O(n²)"
+  },
+  "Insertion": {
+    "description": "Insertion Sort iterates, consuming one input element each repetition, and grows a sorted output list. At each iteration, it removes one element from the input data, finds the location it belongs within the sorted list, and inserts it there.",
+    "pseudoCode": "for i from 1 to N-1:\n  key = a[i]\n  j = i - 1\n  while j >= 0 and a[j] > key:\n    a[j+1] = a[j]\n    j = j - 1\n  a[j+1] = key",
+    "spaceComplexity": "O(1)",
+    "bestTime": "O(n)",
+    "worstTime": "O(n²)"
+  },
+  "Merge": {
+    "description": "Merge Sort is an efficient, general-purpose, and comparison-based sorting algorithm. Most implementations produce a stable sort, which means that the order of equal elements is the same in the input and output. It is a divide-and-conquer algorithm.",
+    "pseudoCode": "function mergeSort(arr):\n  if length of arr <= 1 return arr\n  mid = length of arr / 2\n  left = mergeSort(arr[0...mid])\n  right = mergeSort(arr[mid...end])\n  return merge(left, right)",
+    "spaceComplexity": "O(n)",
+    "bestTime": "O(n log n)",
+    "worstTime": "O(n log n)"
+  },
+  "Quick": {
+    "description": "Quicksort is a divide-and-conquer algorithm. It works by selecting a 'pivot' element from the array and partitioning the other elements into two sub-arrays, according to whether they are less than or greater than the pivot.",
+    "pseudoCode": "function quickSort(arr, low, high):\n  if low < high:\n    pi = partition(arr, low, high)\n    quickSort(arr, low, pi - 1)\n    quickSort(arr, pi + 1, high)",
+    "spaceComplexity": "O(log n)",
+    "bestTime": "O(n log n)",
+    "worstTime": "O(n²)"
+  },
+  "Heap / Radix": {
+    "description": "Heap sort involves building a Heap data structure from the given array and then utilizing the Heap to sort the array. Radix sort is a non-comparative sorting algorithm that sorts data with integer keys by grouping keys by the individual digits.",
+    "pseudoCode": "function heapSort(arr):\n  buildMaxHeap(arr)\n  for i from length of arr down to 1:\n    swap(arr[0], arr[i])\n    heapify(arr, 0, i)",
+    "spaceComplexity": "O(1) / O(n+k)",
+    "bestTime": "O(n log n)",
+    "worstTime": "O(n log n) / O(nk)"
+  },
+  "Linear search": {
+    "description": "Linear search is a very simple search algorithm. In this type of search, a sequential search is made over all items one by one. Every item is checked and if a match is found then that particular item is returned.",
+    "pseudoCode": "for each element in the array:\n  if element == target:\n    return its index\nreturn not found",
+    "spaceComplexity": "O(1)",
+    "bestTime": "O(1)",
+    "worstTime": "O(n)"
+  },
+  "Binary search": {
+    "description": "Binary search is a fast search algorithm with run-time complexity of O(log n). This search algorithm works on the principle of divide and conquer. For this algorithm to work properly, the data collection should be in a sorted form.",
+    "pseudoCode": "low = 0, high = n - 1\nwhile low <= high:\n  mid = low + (high - low) / 2\n  if arr[mid] == target: return mid\n  if arr[mid] < target: low = mid + 1\n  else: high = mid - 1\nreturn not found",
+    "spaceComplexity": "O(1)",
+    "bestTime": "O(1)",
+    "worstTime": "O(log n)"
+  },
+  "BFS": {
+    "description": "Breadth-First Search (BFS) is an algorithm for traversing or searching tree or graph data structures. It starts at the tree root and explores all nodes at the present depth prior to moving on to the nodes at the next depth level.",
+    "pseudoCode": "Q.enqueue(root)\nwhile Q is not empty:\n  v = Q.dequeue()\n  if v is target: return v\n  for all edges from v to w in G.adjacentEdges(v) do\n    if w is not labeled as discovered:\n      label w as discovered\n      Q.enqueue(w)",
+    "spaceComplexity": "O(V)",
+    "bestTime": "O(V + E)",
+    "worstTime": "O(V + E)"
+  },
+  "DFS": {
+    "description": "Depth-First Search (DFS) is an algorithm for traversing or searching tree or graph data structures. The algorithm starts at the root node and explores as far as possible along each branch before backtracking.",
+    "pseudoCode": "function DFS(G, v):\n  label v as discovered\n  for all edges from v to w in G.adjacentEdges(v) do\n    if vertex w is not labeled as discovered then\n      recursively call DFS(G, w)",
+    "spaceComplexity": "O(V)",
+    "bestTime": "O(V + E)",
+    "worstTime": "O(V + E)"
+  },
+  "Dijkstra": {
+    "description": "Dijkstra's algorithm is an algorithm for finding the shortest paths between nodes in a graph. It picks the unvisited vertex with the lowest distance, calculates the distance through it to each unvisited neighbor, and updates the neighbor's distance if smaller.",
+    "pseudoCode": "for each vertex v in Graph:\n  dist[v] = infinity\ndist[source] = 0\nwhile Q is not empty:\n  u = vertex in Q with min dist[u]\n  remove u from Q\n  for each neighbor v of u:\n    alt = dist[u] + length(u, v)\n    if alt < dist[v]:\n      dist[v] = alt",
+    "spaceComplexity": "O(V)",
+    "bestTime": "O(V log V + E)",
+    "worstTime": "O(V²)"
+  },
+  "0/1 Knapsack": {
+    "description": "The knapsack problem is a problem in combinatorial optimization: Given a set of items, each with a weight and a value, determine the number of each item to include in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.",
+    "pseudoCode": "for w from 0 to W:\n  dp[0][w] = 0\nfor i from 1 to n:\n  for w from 0 to W:\n    if weight[i-1] <= w:\n      dp[i][w] = max(val[i-1] + dp[i-1][w-weight[i-1]], dp[i-1][w])\n    else:\n      dp[i][w] = dp[i-1][w]",
+    "spaceComplexity": "O(n * W)",
+    "bestTime": "O(n * W)",
+    "worstTime": "O(n * W)"
+  }
+}

@@ -6,6 +6,7 @@ import {
   ClipboardList,
   Calendar,
   CheckSquare,
+  Code2,
   Settings,
   X
 } from "lucide-react";
@@ -43,10 +44,15 @@ export const Sidebar = ({ isOpen, onClose }) => {
     },
     {
       name: "Attendance",
-      path: "#",
+      path: "/dashboard/attendance",
       icon: CheckSquare,
-      disabled: true,
-      badge: "Soon",
+      disabled: false,
+    },
+    {
+      name: "DSA",
+      path: "/dashboard/dsa",
+      icon: Code2,
+      disabled: false,
     },
     {
       name: "Settings",
