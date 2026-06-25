@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { Mail, Lock, Eye, EyeOff, AlertCircle, CheckCircle, RefreshCcw } from 'lucide-react';
 import AuthLayout from '../../components/auth/AuthLayout';
 import AuthTabs from '../../components/auth/AuthTabs';
@@ -8,6 +7,7 @@ import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import OTPInput from '../../components/auth/OTPInput';
 import StrengthMeter from '../../components/auth/StrengthMeter';
+import api from '../../services/api';
 
 export const ForgotPasswordPage: React.FC = () => {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export const ForgotPasswordPage: React.FC = () => {
     setInfo('');
     setIsLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
+      const res = await api.post('/auth/forgot-password', { email: email.trim().toLowerCase() });
       if (res.data.success) {
         setMaskedPhone(res.data.maskedPhone);
         setInfo('✓ Account found. OTP sent successfully.');
@@ -66,7 +66,7 @@ export const ForgotPasswordPage: React.FC = () => {
     setInfo('');
     setIsLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/auth/resend-otp', { email });
+      await api.post('/auth/resend-otp', { email: email.trim().toLowerCase() });
       setInfo('✓ OTP resent successfully.');
       startTimer();
     } catch (err: any) {
@@ -83,7 +83,7 @@ export const ForgotPasswordPage: React.FC = () => {
     setInfo('');
     setIsLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/verify-otp', { email, otp });
+      const res = await api.post('/auth/verify-otp', { email: email.trim().toLowerCase(), otp });
       if (res.data.success) {
         setResetToken(res.data.resetToken);
         setInfo('✓ OTP verified successfully.');
@@ -109,7 +109,7 @@ export const ForgotPasswordPage: React.FC = () => {
     }
     setIsLoading(true);
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/reset-password', {
+      const res = await api.post('/auth/reset-password', {
         resetToken,
         newPassword,
       });

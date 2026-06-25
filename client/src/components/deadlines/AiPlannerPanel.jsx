@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Sparkles, Play, Clock, Info } from "lucide-react";
+import { Sparkles, Play, Info } from "lucide-react";
 import { toast } from "react-hot-toast";
-import axios from "axios";
 import StudyPlanCard from "./StudyPlanCard";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
 
 /**
  * AI Study Planner Panel. Displays dynamic workload scores, deadline health,
@@ -138,8 +138,8 @@ export const AiPlannerPanel = ({
       const auth = authRaw ? JSON.parse(authRaw) : null;
       const studentId = auth?.student_id || "default_student";
 
-      const response = await axios.post(
-        "http://localhost:5000/api/deadlines/generate-plan",
+      const response = await api.post(
+        "/deadlines/generate-plan",
         {
           studentId,
           title: selectedDeadline.title,

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { Mail, Phone, User, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import AuthLayout from '../../components/auth/AuthLayout';
 import AuthTabs from '../../components/auth/AuthTabs';
@@ -8,6 +7,7 @@ import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import { StrengthMeter } from '../../components/auth/StrengthMeter';
 import { calculatePasswordScore } from '../../utils/passwordStrength';
+import api from '../../services/api';
 
 export const SignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -30,35 +30,60 @@ export const SignupPage: React.FC = () => {
 
   // Email validation on blur
   const checkEmail = async (value: string) => {
-    if (!value) return;
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/check-email', { email: value });
-      setValidation((v) => ({ ...v, email: !res.data.taken }));
-    } catch (e) {
+    const trimmed = value.trim().toLowerCase();
+    if (!trimmed) {
+      setValidation((v) => ({ ...v, email: null }));
+      return;
+    }
+    if (!/^[^@]+@gmail\.com$/.test(trimmed)) {
       setValidation((v) => ({ ...v, email: false }));
+      return;
+    }
+    try {
+      setGlobalError('');
+      const res = await api.post('/auth/check-email', { email: trimmed });
+      setValidation((v) => ({ ...v, email: !res.data.taken }));
+    } catch {
+      setValidation((v) => ({ ...v, email: null }));
+      setGlobalError('Could not verify email availability. Please try again.');
     }
   };
 
   // Phone validation on blur
   const checkPhone = async (value: string) => {
     const stripped = value.replace(/\D/g, '');
-    if (!stripped) return;
-    try {
-      const res = await axios.post('http://localhost:5000/api/auth/check-phone', { phone: stripped });
-      setValidation((v) => ({ ...v, phone: !res.data.taken }));
-    } catch (e) {
+    if (!stripped) {
+      setValidation((v) => ({ ...v, phone: null }));
+      return;
+    }
+    if (stripped.length < 10) {
       setValidation((v) => ({ ...v, phone: false }));
+      return;
+    }
+    try {
+      setGlobalError('');
+      const res = await api.post('/auth/check-phone', { phone: stripped });
+      setValidation((v) => ({ ...v, phone: !res.data.taken }));
+    } catch {
+      setValidation((v) => ({ ...v, phone: null }));
+      setGlobalError('Could not verify phone availability. Please try again.');
     }
   };
 
   // Username validation on blur
   const checkUsername = async (value: string) => {
-    if (!value) return;
+    const trimmed = value.trim();
+    if (!trimmed) {
+      setValidation((v) => ({ ...v, username: null }));
+      return;
+    }
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/check-username', { username: value });
+      setGlobalError('');
+      const res = await api.post('/auth/check-username', { username: trimmed });
       setValidation((v) => ({ ...v, username: !res.data.taken }));
-    } catch (e) {
-      setValidation((v) => ({ ...v, username: false }));
+    } catch {
+      setValidation((v) => ({ ...v, username: null }));
+      setGlobalError('Could not verify username availability. Please try again.');
     }
   };
 
@@ -92,16 +117,19 @@ export const SignupPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setGlobalError('');
-    if (!isFormValid()) return;
+    if (!isFormValid()) {
+      setGlobalError('Please complete all fields with an available email, phone, and username.');
+      return;
+    }
     setIsSubmitting(true);
     try {
       const payload = {
-        email,
+        email: email.trim().toLowerCase(),
         phone: phone.replace(/\D/g, ''),
-        username,
+        username: username.trim(),
         password,
       };
-      const res = await axios.post('http://localhost:5000/api/auth/signup', payload);
+      const res = await api.post('/auth/signup', payload);
       if (res.data.success) {
         navigate('/login');
       }
@@ -137,20 +165,26 @@ export const SignupPage: React.FC = () => {
                 label="Email Address"
                 icon={<Mail className="w-5 h-5" />}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setValidation((v) => ({ ...v, email: null }));
+                }}
                 onBlur={() => checkEmail(email)}
                 placeholder="student@gmail.com"
-                error={validation.email === false ? 'Email is taken or invalid' : undefined}
+                error={validation.email === false ? 'Enter an available @gmail.com address' : undefined}
                 className={validation.email ? 'border-[#10B981] focus:border-[#10B981]' : ''}
               />
               <AuthInput
                 label="Phone (WhatsApp)"
                 icon={<Phone className="w-5 h-5" />}
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setValidation((v) => ({ ...v, phone: null }));
+                }}
                 onBlur={() => checkPhone(phone)}
                 placeholder="+91 98765 43210"
-                error={validation.phone === false ? 'Phone is taken or invalid' : undefined}
+                error={validation.phone === false ? 'Enter an available phone number' : undefined}
                 className={validation.phone ? 'border-[#10B981] focus:border-[#10B981]' : ''}
               />
             </div>
@@ -160,10 +194,13 @@ export const SignupPage: React.FC = () => {
               label="Username"
               icon={<User className="w-5 h-5" />}
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setValidation((v) => ({ ...v, username: null }));
+              }}
               onBlur={() => checkUsername(username)}
               placeholder="student_123"
-              error={validation.username === false ? 'Username is taken or invalid' : undefined}
+              error={validation.username === false ? 'Username is already taken' : undefined}
               className={validation.username ? 'border-[#10B981] focus:border-[#10B981]' : ''}
             />
 
